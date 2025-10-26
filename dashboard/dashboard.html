@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome | Revolynk</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body>
+  <div class="dashboard">
+    <h2>Welcome to Revolynk Dashboard</h2>
+    <button id="logoutBtn">Logout</button>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const token = localStorage.getItem("jwtToken");
+      if (!token) {
+        window.location.href = "login.html";
+        return;
+      }
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+      const token = localStorage.getItem("jwtToken");
+
+      try {
+        const response = await fetch("http://localhost:8080/api/auth/logout", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+
+          }
+        });
+
+        if (response.ok) {
+          localStorage.removeItem("jwtToken"); // ✅ Fix here
+          alert("You have been logged out successfully!");
+          window.location.href = "login.html";
+        } else {
+          const errorData = await response.json();
+          alert(errorData.message || "Logout failed on server.");
+        }
+      } catch (error) {
+        console.error("Logout Error:", error);
+        alert("Server error during logout. Please try again.");
+      }
+    });
+
+    // Auto logout after 3 minutes of inactivity
+    let inactivityTimer;
+    function startInactivityTimer() {
+      inactivityTimer = setTimeout(() => {
+        alert("You have been logged out due to inactivity.");
+        localStorage.removeItem("jwtToken");
+        window.location.href = "login.html";
+      }, 3 * 60 * 1000); // 3 minutes
+    }
+
+    function resetInactivityTimer() {
+      clearTimeout(inactivityTimer);
+      startInactivityTimer();
+    }
+
+    document.addEventListener("mousemove", resetInactivityTimer);
+    document.addEventListener("keypress", resetInactivityTimer);
+    document.addEventListener("click", resetInactivityTimer);
+
+    startInactivityTimer();
+  </script>
+</body>
+</html>
