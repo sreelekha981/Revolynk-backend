@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Job Posting Form</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+
+<style>
+body { font-family: "Poppins", sans-serif; margin: 0; padding: 0; color: #333; background: #f5f6fa; }
+
+/* Header */
+.header { width: 100%; background: #fff; padding: 0.8rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 3px 6px rgba(0,0,0,0.1); position: fixed; top: 0; left: 0; right: 0; z-index: 1000; }
+.header .logo img { height: 40px; }
+.header .user { position: relative; display: flex; align-items: center; cursor: pointer; gap: 1rem; font-weight: 500; color: #333; padding-right: 70px; }
+.header .user i { font-size: 1.5rem; color: #2c3e50; }
+.user-dropdown { position: absolute; top: 120%; right: 0; background: #fff; border: 1px solid #ccc; border-radius: 8px; width: 150px; display: none; flex-direction: column; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+.user-dropdown a { padding: 0.8rem 1rem; text-decoration: none; color: #333; border-bottom: 1px solid #eee; font-size: 0.95rem; }
+.user-dropdown a:hover { background: #f5f5f5; }
+
+/* Layout */
+.page-layout { display: flex; margin-top: 70px; min-height: calc(100vh - 70px); }
+.sidebar { width: 220px; background: #2c3e50; color: #fff; padding: 2rem 1rem; box-sizing: border-box; }
+.sidebar h2 a { text-decoration: none; color: #fff; font-size: 1.5rem; }
+.sidebar ul { list-style: none; padding: 0; margin-top: 2rem; }
+.sidebar ul li { margin-bottom: 1.2rem; }
+.sidebar ul li a { color: #fff; text-decoration: none; font-size: 1rem; display: flex; align-items: center; gap: 0.8rem; padding: 0.5rem 0.8rem; border-radius: 6px; transition: background 0.2s; }
+.sidebar ul li a:hover { background: #34495e; }
+.sidebar ul li .arrow { margin-left:auto; transition:0.3s; }
+.sidebar ul li .arrow.rotate { transform: rotate(90deg); }
+.dropdown-content { display:none; flex-direction: column; margin-left:15px; margin-top:5px; }
+.dropdown-content a { font-size:0.95rem; padding:0.3rem 0; color:#fff; text-decoration:none; }
+.dropdown-content a:hover { color:#ddd; }
+
+/* Main container */
+.main-container { flex: 1; display: flex; flex-direction: column; padding: 2rem; }
+
+/* Form */
+.content-form { background: #fff; padding: 2rem; margin: 2rem auto; border-radius: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.08); max-width: 1000px; width: 100%; }
+label { font-weight: 600; display: block; margin-top: 1rem; margin-bottom: 0.4rem; }
+input[type="text"], input[type="date"], textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-size: 15px; resize: vertical; }
+button[type="submit"], .add-btn { background: #000; color: #fff; border: none; padding: 0.9rem 1.5rem; border-radius: 25px; font-size: 1rem; cursor: pointer; margin-top: 1.5rem; transition: 0.3s; }
+button[type="submit"]:hover, .add-btn:hover { background: #9504e8; }
+.flex { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: flex-start; margin-bottom: 1rem; }
+.half { flex: 1; min-width: 300px; }
+.center-title { text-align: center; }
+ul.custom-list { padding-left: 20px; margin-bottom: 1rem; }
+ul.custom-list li { margin-bottom: 0.5rem; }
+
+/* Responsive */
+@media(max-width:768px){
+  .page-layout { flex-direction: column; }
+  .sidebar { width: 100%; padding: 1rem; display: flex; justify-content: space-around; }
+  .main-container { padding: 1rem; }
+  .header { flex-direction: column; align-items: flex-start; gap: .5rem; padding: .8rem 1rem; }
+  .user-dropdown { right: 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="logo"><img src="assets/images/logos/logo.png" alt="Logo"></div>
+  <div class="user" onclick="toggleDropdown()">
+    <i class="fa-solid fa-user-circle"></i>
+    <span>Venu</span>
+    <div class="user-dropdown" id="userDropdown"><a href="login.html">Logout</a></div>
+  </div>
+</div>
+
+<!-- Page Layout -->
+<div class="page-layout">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2><a href="dashboard.html">Dashboard</a></h2>
+    <ul>
+      <li><a href="dashboard.html"><i class="fa-solid fa-chart-line"></i> Insights</a></li>
+      <li class="dropdown">
+        <a href="#" onclick="toggleRecruitDropdown(event)">
+          <i class="fa-solid fa-briefcase"></i> Recruit
+          <i class="fa-solid fa-angle-right arrow"></i>
+        </a>
+        <div class="dropdown-content">
+          <a href="job-postings.html"><i class="fa-solid fa-file-lines"></i> Job Postings</a>
+          <a href="job-applications.html"><i class="fa-solid fa-envelope-open-text"></i> Job Applications</a>
+        </div>
+      </li>
+      <li><a href="case-studies.html"><i class="fa-solid fa-folder-open"></i> Case Studies</a></li>
+      <li><a href="leads.html"><i class="fa-solid fa-user-group"></i> Leads</a></li>
+      <li><a href="user.html"><i class="fa-solid fa-users"></i> Users</a></li>
+    </ul>
+  </div>
+
+  <!-- Main Container -->
+  <div class="main-container">
+    <h2 class="center-title">Job Posting Form</h2>
+
+    <form id="jobForm" class="content-form">
+      <div class="flex">
+        <div class="half">
+          <label>Job Title</label>
+          <input type="text" id="jobTitle" required>
+        </div>
+        <div class="half">
+          <label>Experience</label>
+          <input type="text" id="jobExperience" placeholder="2 to 4 Years" required>
+        </div>
+        <div class="half">
+          <label>Location</label>
+          <input type="text" id="jobLocation" placeholder="City" required>
+        </div>
+        <div class="half">
+          <label>Job Type</label>
+          <input type="text" id="jobType" placeholder="Full-Time" required>
+        </div>
+        <div class="half">
+          <label>Date</label>
+          <input type="date" id="jobDate" required>
+        </div>
+      </div>
+
+      <label>Job Description</label>
+      <textarea id="jobDescription" rows="4" required></textarea>
+
+      <label>Desired Candidate Profile</label>
+      <div id="profileContainer">
+        <input type="text" class="profileInput mb-2" placeholder="Point 1" required>
+      </div>
+      <button type="button" class="add-btn" onclick="addProfilePoint()">+ Add Profile Point</button>
+
+      <label>Skills</label>
+      <div id="skillsContainer">
+        <input type="text" class="skillInput mb-2" placeholder="Skill 1" required>
+      </div>
+      <button type="button" class="add-btn" onclick="addSkill()">+ Add Skill</button>
+
+      <button type="submit">Submit Job</button>
+    </form>
+  </div>
+</div>
+
+<script>
+// Header dropdown
+function toggleDropdown(){
+  const dd = document.getElementById('userDropdown');
+  dd.style.display = dd.style.display==='flex'?'none':'flex';
+}
+
+// Recruit dropdown
+function toggleRecruitDropdown(event){
+  event.preventDefault();
+  const content = event.currentTarget.nextElementSibling;
+  const arrow = event.currentTarget.querySelector('.arrow');
+  content.style.display = content.style.display === "flex" ? "none" : "flex";
+  arrow.classList.toggle("rotate");
+}
+
+// Dynamic profile points & skills
+function addProfilePoint(){
+  const container = document.getElementById('profileContainer');
+  const input = document.createElement('input');
+  input.type='text';
+  input.className='profileInput mb-2';
+  input.placeholder='New Point';
+  container.appendChild(input);
+}
+function addSkill(){
+  const container = document.getElementById('skillsContainer');
+  const input = document.createElement('input');
+  input.type='text';
+  input.className='skillInput mb-2';
+  input.placeholder='New Skill';
+  container.appendChild(input);
+}
+
+
+// Form submit
+document.getElementById('jobForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const title = document.getElementById('jobTitle').value.trim();
+  const experience = document.getElementById('jobExperience').value.trim();
+  const location = document.getElementById('jobLocation').value.trim();
+  const type = document.getElementById('jobType').value.trim();
+  const date = document.getElementById('jobDate').value;
+  const description = document.getElementById('jobDescription').value.trim();
+  const profilePoints = Array.from(document.querySelectorAll('.profileInput')).map(i=>i.value.trim()).filter(p=>p);
+  const skills = Array.from(document.querySelectorAll('.skillInput')).map(i=>i.value.trim()).filter(s=>s);
+
+  const job = { title, experience, location, type, date, description, profilePoints, skills };
+
+  let jobsData = JSON.parse(localStorage.getItem('jobsData')) || [];
+  jobsData.push(job);
+  localStorage.setItem('jobsData', JSON.stringify(jobsData));
+
+  // Redirect to job postings page
+  window.location.href='job-postings.html';
+});
+</script>
+</body>
+</html>
