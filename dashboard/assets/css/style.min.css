@@ -68,9 +68,9 @@ table th { background:#f1f1f1; font-weight:600; }
 /* Forms */
 .content-form{display:none;background:#fff;padding:2rem;margin:2rem auto;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);max-width:1000px;width: 100%;}
 label{font-weight:600;display:block;margin-top:1rem;margin-bottom:.4rem;}
-input[type="text"],input[type="date"],textarea,input[type="file"]{width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;resize:vertical;font-size:15px;}
-button[type="submit"],.add-btn,.add-question,.add-item{background:#000;color:#fff;border:none;padding:.9rem 1.5rem;border-radius:25px;font-size:1rem;cursor:pointer;margin-top:1.5rem;transition:.3s;}
-button[type="submit"]:hover,.add-btn:hover,.add-question:hover,.add-item:hover{background:#9504e8;}
+input[type="text"],input[type="date"],input[type="url"],textarea,input[type="file"]{width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;resize:vertical;font-size:15px;}
+button[type="submit"],.btn-add-section,.add-btn,.add-question,.add-item{background:#000;color:#fff;border:none;padding:.9rem 1.5rem;border-radius:25px;font-size:1rem;cursor:pointer;margin-top:1.5rem;transition:.3s;}
+button[type="submit"]:hover,.btn-add-section:hover,.add-btn:hover,.add-question:hover,.add-item:hover{background:#9504e8;}
 .flex{display:flex;gap:1.5rem;flex-wrap:wrap;align-items:flex-start;margin-bottom:1rem;}
 .half{flex:1;min-width:300px;}
 .accordion-group{margin-top:15px;border-top:1px solid #eee;padding-top:10px;}

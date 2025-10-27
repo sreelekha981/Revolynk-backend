@@ -557,7 +557,26 @@ a.text-primary.fw-semibold {
     }
 }
 
+.linkedin-link {
+  margin-top: 30px;
+}
 
+.linkedin-link a {
+  color: #0a66c2;
+  text-decoration: none;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.linkedin-link a:hover {
+  text-decoration: underline;
+}
+
+.linkedin-link i {
+  font-size: 25px;
+}
 
 /* job postings */
 body {
@@ -566,6 +585,7 @@ body {
 
 .job-details-section {
   background: #f6f7fb;
+  margin-top: 100px;
 }
 
 /* Left list items */
@@ -624,6 +644,7 @@ body {
   padding: 40px 25px;
   max-width: 950px;
   margin: 50px auto;
+  margin-top: 100px;
   border-radius: 16px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
   animation: fadeIn 0.6s ease-in-out;
