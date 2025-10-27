@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Job Applications Dashboard</title>
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  rel="stylesheet"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+  rel="stylesheet"
+/>
+<link rel="stylesheet" href="assets/css/style.min.css">
+</head>
+<body>
+
+<div class="header">
+  <div class="logo"><img src="assets/images/logos/logo.png" alt="Logo"></div>
+  <div class="user" onclick="toggleDropdown()">
+    <i class="fa-solid fa-user-circle"></i>
+    <span>Venu</span>
+    <div class="user-dropdown" id="userDropdown"><a href="login.html">Logout</a></div>
+  </div>
+</div>
+
+<div class="page-layout">
+  <div class="sidebar">
+    <h2><a href="dashboard.html">Dashboard</a></h2>
+    <ul>
+      <li><a href="dashboard.html"><i class="fa-solid fa-chart-line"></i> Insights</a></li>
+      <li class="dropdown">
+        <a href="#" onclick="toggleRecruitDropdown(event)">
+          <i class="fa-solid fa-briefcase"></i> Recruit
+          <i class="fa-solid fa-angle-right arrow"></i>
+        </a>
+        <div class="dropdown-content" style="display:none; margin-left:20px;">
+          <a href="job-postings.html"><i class="fa-solid fa-file-lines"></i> Job Postings</a>
+          <a href="job-applications.html"><i class="fa-solid fa-envelope-open-text"></i> Job Applications</a>
+        </div>
+      </li>
+      <li><a href="case-studies.html"><i class="fa-solid fa-folder-open"></i> Case Studies</a></li>
+      <li><a href="leads.html"><i class="fa-solid fa-user-group"></i> Leads</a></li>
+      <li><a href="user.html"><i class="fa-solid fa-users"></i> Users</a></li>
+    </ul>
+  </div>
+
+  <div class="main-container">
+    <div class="card">
+      <div class="title-row">
+        <h2>Job Applications</h2>
+        <button class="add-btn" onclick="openModal()">+ Add Application</button>
+      </div>
+
+      <div class="top-controls">
+        <div class="left-icon">
+          <button class="icon-btn"><i class="fa-solid fa-table-cells-large"></i></button>
+          <div class="tooltip">Name, Email, Phone, Job, Status, Applied On</div>
+        </div>
+        <div class="right-controls">
+          <button onclick="exportExcel()">Excel</button>
+          <button onclick="printTable()">Print</button>
+          <input type="text" id="searchInput" placeholder="Search applications..." oninput="searchTable()"/>
+        </div>
+      </div>
+
+      <div class="filters">
+        <select id="filterJob">
+          <option value="">--Job--</option>
+        </select>
+        <select id="filterStatus">
+          <option value="">--Status--</option>
+          <option>Pending</option>
+          <option>Reviewed</option>
+          <option>Rejected</option>
+          <option>Accepted</option>
+        </select>
+        <input type="date" id="filterDate">
+        <div class="actions">
+          <button class="yes" onclick="applyFilters()"><i class="fa-solid fa-check"></i></button>
+          <button class="no" onclick="resetFilters()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+
+      <table id="applicationsTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Job</th>
+            <th>Status</th>
+            <th>Applied On</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="7" style="text-align:center;">No applications available.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="pagination">
+        <div>
+          Show
+          <select id="entriesPerPage" onchange="changeEntries()">
+            <option>10</option>
+            <option>20</option>
+            <option>50</option>
+          </select>
+          entries
+        </div>
+        <div>
+          <button onclick="prevPage()">&lt;</button>
+          <span id="pageInfo">0 / 0</span>
+          <button onclick="nextPage()">&gt;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal" id="jobModal">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closeModal()">&times;</button>
+    <h3 id="modalTitle">Add Application</h3>
+    <label>Name</label>
+    <input type="text" id="applicantName" />
+    <label>Email</label>
+    <input type="email" id="applicantEmail" />
+    <label>Phone</label>
+    <input type="text" id="applicantPhone" />
+    <label>Job</label>
+    <select id="applicantJob"></select>
+    <label>Status</label>
+    <select id="applicantStatus">
+      <option>Pending</option>
+      <option>Reviewed</option>
+      <option>Rejected</option>
+      <option>Accepted</option>
+    </select>
+    <label>Applied On</label>
+    <input type="date" id="applicantDate" />
+    <button style="background:#28a745;color:#fff;" onclick="saveApplication()">Save</button>
+  </div>
+</div>
+
+<script>
+// User dropdown
+function toggleDropdown() {
+  const dropdown = document.getElementById('userDropdown');
+  dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
+}
+window.addEventListener('click', function(e) {
+  const user = document.querySelector('.user');
+  const dropdown = document.getElementById('userDropdown');
+  if (!user.contains(e.target)) dropdown.style.display = 'none';
+});
+
+// Recruit dropdown toggle
+function toggleRecruitDropdown(event) {
+  event.preventDefault();
+  const content = event.currentTarget.nextElementSibling;
+  const arrow = event.currentTarget.querySelector('.arrow');
+  content.style.display = content.style.display === "block" ? "none" : "block";
+  arrow.classList.toggle("rotate");
+}
+
+// Applications Data
+let applications = [];
+let jobs = ["Marketing Manager","Frontend Developer","UI Designer","HR Executive"]; // Example jobs
+let currentPage = 1;
+let entries = 10;
+let editingIndex = -1;
+
+// Populate Job filters
+const jobFilterSelect = document.getElementById('filterJob');
+const jobModalSelect = document.getElementById('applicantJob');
+jobs.forEach(job=>{
+  const opt = document.createElement('option'); opt.value=job; opt.text=job;
+  jobFilterSelect.add(opt.cloneNode(true));
+  jobModalSelect.add(opt.cloneNode(true));
+});
+
+// Render table
+function renderTable() {
+  const tbody = document.querySelector("#applicationsTable tbody");
+  tbody.innerHTML = "";
+  const start = (currentPage-1)*entries;
+  const end = start + entries;
+  let pageData = applications.slice(start,end);
+
+  const searchText = document.getElementById('searchInput').value.toLowerCase();
+  const filterJob = document.getElementById('filterJob').value;
+  const filterStatus = document.getElementById('filterStatus').value;
+  const filterDate = document.getElementById('filterDate').value;
+
+  pageData = pageData.filter(app=>{
+    return (
+      app.name.toLowerCase().includes(searchText) &&
+      (filterJob==="" || app.job===filterJob) &&
+      (filterStatus==="" || app.status===filterStatus) &&
+      (filterDate==="" || app.date===filterDate)
+    );
+  });
+
+  if(pageData.length===0){
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No applications available.</td></tr>';
+  } else {
+    pageData.forEach((app,i)=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${app.name}</td><td>${app.email}</td><td>${app.phone}</td><td>${app.job}</td><td>${app.status}</td><td>${app.date}</td>
+      <td>
+        <button onclick="editApplication(${start+i})">Edit</button>
+        <button onclick="deleteApplication(${start+i})">Delete</button>
+      </td>`;
+      tbody.appendChild(tr);
+    });
+  }
+  document.getElementById('pageInfo').innerText = `${currentPage} / ${Math.max(1,Math.ceil(applications.length/entries))}`;
+}
+
+// Pagination
+function changeEntries(){ entries=parseInt(document.getElementById('entriesPerPage').value); currentPage=1; renderTable(); }
+function prevPage(){ if(currentPage>1) currentPage--; renderTable(); }
+function nextPage(){ if(currentPage < Math.ceil(applications.length/entries)) currentPage++; renderTable(); }
+
+// Search / Filters
+function searchTable(){ currentPage=1; renderTable(); }
+function applyFilters(){ currentPage=1; renderTable(); }
+function resetFilters(){ document.getElementById('filterJob').value=""; document.getElementById('filterStatus').value=""; document.getElementById('filterDate').value=""; renderTable(); }
+
+// Modal
+function openModal() {
+  document.getElementById('jobModal').style.display = 'block';
+  document.getElementById('modalTitle').innerText = 'Add Application';
+  editingIndex = -1;
+  document.getElementById('applicantName').value = '';
+  document.getElementById('applicantEmail').value = '';
+  document.getElementById('applicantPhone').value = '';
+  document.getElementById('applicantJob').value = jobs[0];
+  document.getElementById('applicantStatus').value = 'Pending';
+  document.getElementById('applicantDate').value = new Date().toISOString().split('T')[0];
+}
+function closeModal(){ document.getElementById('jobModal').style.display = 'none'; }
+
+// Save / Edit Application
+function saveApplication() {
+  const name = document.getElementById('applicantName').value;
+  const email = document.getElementById('applicantEmail').value;
+  const phone = document.getElementById('applicantPhone').value;
+  const job = document.getElementById('applicantJob').value;
+  const status = document.getElementById('applicantStatus').value;
+  const date = document.getElementById('applicantDate').value;
+
+  if(!name || !email){ alert('Name and Email are required'); return; }
+
+  if(editingIndex >=0) {
+    applications[editingIndex] = {name,email,phone,job,status,date};
+  } else {
+    applications.push({name,email,phone,job,status,date});
+  }
+  closeModal();
+  renderTable();
+}
+
+// Edit / Delete
+function editApplication(i){
+  editingIndex = i;
+  const app = applications[i];
+  document.getElementById('applicantName').value = app.name;
+  document.getElementById('applicantEmail').value = app.email;
+  document.getElementById('applicantPhone').value = app.phone;
+  document.getElementById('applicantJob').value = app.job;
+  document.getElementById('applicantStatus').value = app.status;
+  document.getElementById('applicantDate').value = app.date;
+  document.getElementById('modalTitle').innerText = 'Edit Application';
+  document.getElementById('jobModal').style.display = 'block';
+}
+function deleteApplication(i){ if(confirm('Delete application "'+applications[i].name+'"?')) { applications.splice(i,1); renderTable(); } }
+
+// Excel Export
+function exportExcel() {
+  if(applications.length===0){ alert('No data to export'); return; }
+  let csv = 'Name,Email,Phone,Job,Status,Applied On\n';
+  applications.forEach(app=>{
+    csv += `${app.name},${app.email},${app.phone},${app.job},${app.status},${app.date}\n`;
+  });
+  const blob = new Blob([csv], {type: 'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'job_applications.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Print
+function printTable() {
+  let printContents = document.querySelector('.main-container').innerHTML;
+  let originalContents = document.body.innerHTML;
+  document.body.innerHTML = printContents;
+  window.print();
+  document.body.innerHTML = originalContents;
+  location.reload();
+}
+
+renderTable();
+</script>
+
+</body>
+</html>
