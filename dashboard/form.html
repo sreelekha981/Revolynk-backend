@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Content Management Dashboard</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/style.min.css">
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="logo"><img src="assets/images/logos/logo.png" alt="Logo"></div>
+  <div class="user" onclick="toggleDropdown()">
+    <i class="fa-solid fa-user-circle"></i><span>Venu</span>
+    <div class="user-dropdown" id="userDropdown"><a href="login.html">Logout</a></div>
+  </div>
+</div>
+
+<!-- Page Layout -->
+<div class="page-layout">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2><a href="dashboard.html">Dashboard</a></h2>
+    <ul>
+      <li><a href="dashboard.html"><i class="fa-solid fa-chart-line"></i> Insights</a></li>
+      <li class="dropdown">
+        <a href="#" onclick="toggleRecruitDropdown(event)">
+          <i class="fa-solid fa-briefcase"></i> Recruit
+          <i class="fa-solid fa-angle-right arrow"></i>
+        </a>
+        <div class="dropdown-content" style="display:none; margin-left:20px;">
+          <a href="job-postings.html"><i class="fa-solid fa-file-lines"></i> Job Postings</a>
+          <a href="job-applications.html"><i class="fa-solid fa-envelope-open-text"></i> Job Applications</a>
+        </div>
+      </li>
+      <li><a href="case-studies.html"><i class="fa-solid fa-folder-open"></i> Case Studies</a></li>
+      <li><a href="leads.html"><i class="fa-solid fa-user-group"></i> Leads</a></li>
+      <li><a href="user.html"><i class="fa-solid fa-users"></i> Users</a></li>
+    </ul>
+  </div>
+
+  <!-- Main Container -->
+  <div class="main-container">
+   <h2 class="center-title">Insights</h2>
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <div class="filter-item" data-content="topic">Topic <span class="toggle">+</span></div>
+      <div class="filter-item" data-content="industry">Industry <span class="toggle">+</span></div>
+      <div class="filter-item" data-content="content">Content Type <span class="toggle">+</span></div>
+    </div>
+    <div class="expanded-row" id="expandedRow"></div>
+
+    <!-- ALL FORMS START HERE -->
+
+    <!-- Blog Form -->
+    <form id="BlogForm" class="content-form">
+      <h2>Add Blog</h2>
+      <label>Title</label><input type="text" id="title-blog">
+      <label>Topic</label><input type="text" class="auto-topic" readonly>
+      <label>Industry</label><input type="text" class="auto-industry" readonly>
+      <label>Date</label><input type="date">
+      <label>Intro Paragraph</label><textarea></textarea>
+      <h3>Additional Sections</h3><div id="blogContentContainer"><div class="item"><label>Section Title</label><input type="text"><label>Section Content</label><textarea></textarea></div></div>
+      <button type="button" class="add-btn" onclick="addSection('blogContentContainer')">+ Add Section</button>
+      <label>Upload Image</label><input type="file">
+      <label>Paragraph after Image</label><textarea></textarea>
+      <h3>Accordion Sections</h3><div id="blogAccordionContainer"><div class="item"><label>Accordion Title</label><input type="text"><label>Accordion Description</label><textarea></textarea></div></div>
+      <button type="button" class="add-btn" onclick="addAccordion('blogAccordionContainer')">+ Add Accordion</button>
+            <label>Authors</label><div id="authorsContainer"><div class="author-item"><input type="text" placeholder="Author Name"><label>Designation</label><textarea></textarea><label>LinkedIn URL</label>
+    <input type="url" placeholder=""></div></div>
+      <button type="button" class="add-btn" onclick="addAuthor()">+ Add Author</button>
+      <button type="submit">Submit Blog</button>
+    </form>
+
+    <!-- Case Study Form -->
+    <form id="CaseStudyForm" class="content-form">
+      <h2>Add Case Study</h2>
+      <label>Main Heading</label><input type="text">
+      <label>Subtitle</label><textarea></textarea>
+      <label>Topic</label><input type="text" class="auto-topic" readonly>
+      <label>Industry</label><input type="text" class="auto-industry" readonly>
+       <label>Date</label><input type="date">
+      <label>Image</label><input type="file">
+      <h3>Additional Sections</h3><div id="csContentContainer"><div class="item"><label>Section Title</label><input type="text"><label>Section Content</label><textarea></textarea></div></div>
+      <button type="button" class="add-btn" onclick="addSection('csContentContainer')">+ Add Section</button>
+      <label>Thumbnail Image</label>
+      <input type="file">
+
+      <label>Video URL</label>
+      <input type="text" placeholder="Enter YouTube or video link">
+      <h3>Additional Sections</h3><div id="csContentContainer"><div class="item"><label>Section Title</label><input type="text"><label>Section Content</label><textarea></textarea></div></div>
+      <button type="button" class="add-btn" onclick="addSection('csContentContainer')">+ Add Section</button>
+       <label>Image</label><input type="file">
+      <h3>Accordion Sections</h3><div id="csAccordionContainer"><div class="item"><label>Accordion Title</label><input type="text"><label>Accordion Description</label><textarea></textarea></div></div>
+      <button type="button" class="add-btn" onclick="addAccordion('csAccordionContainer')">+ Add Accordion</button>
+      <button type="submit">Submit Case Study</button>
+    </form>
+
+   <!-- Live Interview Form -->
+<form id="LiveInterviewForm" class="content-form" onsubmit="return validateInterviewForm(event)">
+  <h2>Live Interview</h2>
+
+  <label>Interview Title</label>
+  <input type="text" maxlength="100" required>
+
+  <label>Topic</label>
+  <input type="text" maxlength="100" required>
+
+  <label>Industry</label>
+  <input type="text" maxlength="100" required>
+
+  <label>Date</label>
+  <input type="date" required>
+
+  <h3>Additional Sections</h3>
+  <div id="qaSectionsContainer">
+    <div class="qa-section">
+      <label>Title</label>
+      <input type="text" class="qa-question" maxlength="100" required>
+
+      <label>Content</label>
+      <textarea class="qa-answer" maxlength="350" required></textarea>
+    </div>
+  </div>
+
+  <button type="button" class="btn-add-section" onclick="addQASection()">+ Add Section</button>
+
+  <label>Upload Image</label>
+  <input type="file" accept="image/*" required>
+
+  <label>Quote / Highlight</label>
+  <textarea maxlength="350" required></textarea>
+
+  <label>Interviewee Name</label>
+  <input type="text" maxlength="100" required>
+
+  <label>Interviewee Designation</label>
+  <input type="text" maxlength="100" required>
+
+  <h3>Questions</h3>
+  <div id="interviewQuestionsContainer">
+    <div class="question-block">
+      <label>Question 1</label>
+      <input type="text" maxlength="100" required>
+
+      <label>Answer 1</label>
+      <textarea maxlength="350" required></textarea>
+    </div>
+  </div>
+
+  <button type="button" class="add-question" onclick="addInterviewQuestion()">+ Add Question</button>
+  <button type="submit">Submit Interview</button>
+</form>
+
+<!-- News Article Form -->
+<form id="NewsArticleForm" class="content-form" onsubmit="return validateForm(event)">
+  <h2>News Article</h2>
+
+  <label>Article Title</label>
+  <input type="text" maxlength="100" required>
+
+  <label>Subtitle</label>
+  <textarea maxlength="350" required></textarea>
+
+  <label>Topic</label>
+  <input type="text" class="auto-topic" maxlength="100" required>
+
+  <label>Industry</label>
+  <input type="text" class="auto-industry" maxlength="100" required>
+
+  <label>Date</label>
+  <input type="date" required>
+
+  <label>Main Content</label>
+  <textarea maxlength="350" required></textarea>
+
+  <h3>Bullet Points</h3>
+  <div id="newsBulletContainer">
+    <div class="list-item">
+      <input type="text" maxlength="100" placeholder="Bullet point" required>
+    </div>
+  </div>
+  <button type="button" class="add-item" onclick="addListItem('newsBulletContainer')">Add Bullet Item</button>
+
+  <label>Article Image</label>
+  <input type="file" accept="image/*" required>
+
+  <h3>Additional Sections</h3>
+  <div id="faqFieldGroup">
+    <div class="faq-field">
+      <label>Heading</label>
+      <input type="text" class="faq-title" maxlength="100" required>
+
+      <label>Content</label>
+      <textarea class="answer-input" maxlength="350" required></textarea>
+    </div>
+  </div>
+
+  <button type="button" class="btn-add-section" onclick="addFaqField()">+ Add Section</button>
+
+  <h3>Accordion Items</h3>
+  <div id="newsAccordionContainer">
+    <div class="accordion-item">
+      <input type="text" maxlength="100" placeholder="Title" required>
+      <textarea maxlength="350" placeholder="Content" required></textarea>
+    </div>
+  </div>
+  <button type="button" class="add-item" onclick="addAccordion('newsAccordionContainer')">Add Accordion Item</button>
+
+  <label>Heading</label>
+  <input type="text" maxlength="100" required>
+
+  <label>Description</label>
+  <textarea maxlength="350" required></textarea>
+
+  <h3>Author Details</h3>
+  <div id="writerSection">
+    <div class="author-item">
+      <label>Author Name</label>
+      <input type="text" placeholder="Enter author name" maxlength="100" required>
+
+      <label>Designation</label>
+      <input type="text" placeholder="Enter designation" maxlength="100" required>
+
+      <label>LinkedIn URL</label>
+      <input type="url" placeholder="Enter LinkedIn profile link">
+    </div>
+  </div>
+  <button type="button" class="add-item" onclick="addAuthor()">+ Add Author</button>
+
+  <button type="submit">Submit Article</button>
+</form>
+
+<!-- Perspective Form -->
+<form id="PerspectiveForm" class="content-form" onsubmit="return validateForm(event)">
+  <h2>Perspective</h2>
+
+  <label>Article Title</label>
+  <input type="text" maxlength="100" required>
+
+  <label>Subtitle</label>
+  <input type="text" maxlength="100" required>
+
+  <label>Topic</label>
+  <input type="text" class="auto-topic" maxlength="100" required>
+
+  <label>Industry</label>
+  <input type="text" class="auto-industry" maxlength="100" required>
+
+  <label>Date</label>
+  <input type="date" required>
+
+  <h3>In Brief</h3>
+  <div id="briefContainer">
+    <div class="item">
+      <label>Section Content</label>
+      <textarea maxlength="350" required></textarea>
+      <input type="text" maxlength="100" placeholder="Key insight" required>
+    </div>
+  </div>
+  <button type="button" class="add-btn" onclick="addBrief()">+ Add Point</button>
+
+  <h3>Article Image</h3>
+  <label>Upload Image</label>
+  <input type="file" accept="image/*" required>
+
+  <h3>Additional Sections</h3>
+  <div id="questionContainer">
+    <div class="question-item">
+      <label>Title</label>
+      <input type="text" class="question-input" maxlength="100" required>
+
+      <label>Content</label>
+      <textarea class="answer-input" maxlength="350" required></textarea>
+    </div>
+  </div>
+  <button type="button" class="btn-add-section" onclick="addQuestionBlock()">+ Add Section</button>
+
+  <h3>Accordion Sections</h3>
+  <div id="perspectiveAccordionContainer">
+    <div class="item">
+      <label>Accordion Title</label>
+      <input type="text" maxlength="100" required>
+
+      <label>Accordion Description</label>
+      <textarea maxlength="350" required></textarea>
+    </div>
+  </div>
+  <button type="button" class="add-btn" onclick="addAccordion('perspectiveAccordionContainer')">+ Add Accordion</button>
+  <button type="submit">Submit Perspective</button>
+</form>
+
+<!-- Podcast Form -->
+<form id="PodcastForm" class="content-form" onsubmit="return validateForm(event)">
+  <h2>Podcast</h2>
+
+  <label>Title</label>
+  <input type="text" maxlength="100" required>
+
+  <label>Subtitle</label>
+  <textarea maxlength="350" required></textarea>
+
+  <label>Topic</label>
+  <input type="text" class="auto-topic" maxlength="100" required>
+
+  <label>Industry</label>
+  <input type="text" class="auto-industry" maxlength="100" required>
+
+  <label>Date</label>
+  <input type="date" required>
+
+  <div id="episodesContainer"></div>
+  <button type="button" class="add-btn" onclick="addEpisode()">+ Add Episode</button>
+  <button type="submit">Submit Podcast</button>
+</form>
+
+<!-- Research Repo Form -->
+<form id="ResearchForm" class="content-form" onsubmit="return validateForm(event)">
+  <h2>Research Repository</h2>
+
+  <label>Title</label>
+  <input type="text" maxlength="100" required>
+
+  <label>Topic</label>
+  <input type="text" class="auto-topic" maxlength="100" required>
+
+  <label>Industry</label>
+  <input type="text" class="auto-industry" maxlength="100" required>
+
+  <label>Date</label>
+  <input type="date" required>
+
+  <h3>Author Details</h3>
+  <div id="authorGroup">
+    <div class="author-item">
+      <label>Author Name</label>
+      <input type="text" placeholder="Enter author name" maxlength="100" required>
+
+      <label>Designation</label>
+      <input type="text" placeholder="Enter designation" maxlength="100" required>
+
+      <label>LinkedIn URL</label>
+      <input type="url" placeholder="Enter LinkedIn profile link">
+    </div>
+  </div>
+  <button type="button" class="add-item" onclick="addAuthor()">+ Add Author</button>
+
+  <label>Abstract</label>
+  <textarea maxlength="350" required></textarea>
+
+  <label>Upload Document</label>
+  <input type="file" required>
+
+  <h3>Key Findings</h3>
+  <div id="findingsContainer">
+    <div class="finding-item">
+      <input type="text" maxlength="100" placeholder="Key Finding" required>
+    </div>
+  </div>
+  <button type="button" class="add-btn" onclick="addFinding()">+ Add Finding</button>
+
+  <h3>Additional Sections</h3>
+  <div id="contentBlockWrapper">
+    <div class="content-block">
+      <label>Title</label>
+      <input type="text" class="block-title" maxlength="100" required>
+
+      <label>Content</label>
+      <textarea class="block-details" maxlength="350" required></textarea>
+    </div>
+  </div>
+  <button type="button" class="btn-add-section" onclick="addContentBlock()">+ Add Section</button>
+
+  <h3>Accordion Sections</h3>
+  <div id="researchAccordionContainer">
+    <div class="accordion-item">
+      <input type="text" maxlength="100" placeholder="Title" required>
+      <textarea maxlength="350" placeholder="Content" required></textarea>
+    </div>
+  </div>
+  <button type="button" class="add-btn" onclick="addAccordion('researchAccordionContainer')">+ Add Accordion</button>
+
+  <button type="submit">Submit Research</button>
+</form>
+    <!-- ALL FORMS END HERE -->
+
+  </div>
+</div>
+
+
+
+<script src="assets/js/form.js"></script>
+
+</body>
+</html>

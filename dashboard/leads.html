@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Leads Dashboard</title>
+
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  rel="stylesheet"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+  rel="stylesheet"
+/>
+<link rel="stylesheet" href="assets/css/style.min.css">
+
+
+</head>
+<body>
+
+<div class="header">
+  <div class="logo"><img src="assets/images/logos/logo.png" alt="Logo"></div>
+  <div class="user" onclick="toggleDropdown()">
+    <i class="fa-solid fa-user-circle"></i>
+    <span>Venu</span>
+    <div class="user-dropdown" id="userDropdown"><a href="login.html">Logout</a></div>
+  </div>
+</div>
+
+<div class="page-layout">
+  <div class="sidebar">
+    <h2><a href="dashboard.html">Dashboard</a></h2>
+    <ul>
+      <li><a href="dashboard.html"><i class="fa-solid fa-chart-line"></i> Insights</a></li>
+      <li class="dropdown">
+        <a href="#" onclick="toggleRecruitDropdown(event)">
+          <i class="fa-solid fa-briefcase"></i> Recruit
+          <i class="fa-solid fa-angle-right arrow"></i>
+        </a>
+        <div class="dropdown-content" style="display:none; margin-left:20px;">
+          <a href="job-postings.html"><i class="fa-solid fa-file-lines"></i> Job Postings</a>
+          <a href="job-applications.html"><i class="fa-solid fa-envelope-open-text"></i> Job Applications</a>
+        </div>
+      </li>
+      <li><a href="case-studies.html"><i class="fa-solid fa-folder-open"></i> Case Studies</a></li>
+      <li><a href="leads.html"><i class="fa-solid fa-user-group"></i> Leads</a></li>
+      <li><a href="user.html"><i class="fa-solid fa-users"></i> Users</a></li>
+    </ul>
+  </div>
+
+  <div class="main-container">
+    <div class="card">
+      <div class="title-row">
+        <h2>Leads</h2>
+        <button class="add-btn" onclick="addLead()">+ Add Lead</button>
+      </div>
+
+      <div class="top-controls">
+        <div class="left-icon">
+          <button class="icon-btn"><i class="fa-solid fa-table-cells-large"></i></button>
+          <div class="tooltip">Name, Email, Phone, Message, Source, Status, Date</div>
+        </div>
+        <div class="right-controls">
+          <button onclick="exportExcel()">Excel</button>
+          <button onclick="printTable()">Print</button>
+          <input type="text" id="searchInput" placeholder="Search leads..." oninput="searchTable()"/>
+        </div>
+      </div>
+
+      <div class="filters">
+        <select id="filterStatus">
+          <option value="">--Status--</option>
+          <option>Pending</option>
+          <option>Contacted</option>
+          <option>In Progress</option>
+          <option>Closed</option>
+        </select>
+        <select id="filterSource">
+          <option value="">--Source--</option>
+          <option>Website</option>
+          <option>Campaign</option>
+          <option>Referral</option>
+          <option>Other</option>
+        </select>
+        <input type="date" id="filterDate">
+        <div class="actions">
+          <button class="yes" onclick="applyFilters()"><i class="fa-solid fa-check"></i></button>
+          <button class="no" onclick="resetFilters()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+
+      <table id="leadsTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Message</th>
+            <th>Source</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="8" style="text-align:center;">No leads available.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination">
+        <div>
+          Show
+          <select id="entriesPerPage" onchange="changeEntries()">
+            <option>10</option>
+            <option>20</option>
+            <option>50</option>
+          </select>
+          entries
+        </div>
+        <div>
+          <button onclick="prevPage()">&lt;</button>
+          <span id="pageInfo">0 / 0</span>
+          <button onclick="nextPage()">&gt;</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// User dropdown
+function toggleDropdown() {
+  const dropdown = document.getElementById('userDropdown');
+  dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
+}
+window.addEventListener('click', function(e) {
+  const user = document.querySelector('.user');
+  const dropdown = document.getElementById('userDropdown');
+  if (!user.contains(e.target)) dropdown.style.display = 'none';
+});
+
+// Leads data
+let leads = []; // empty initially
+let currentPage = 1;
+let entries = 10;
+
+function renderTable(){
+  const tbody = document.querySelector("#leadsTable tbody");
+  tbody.innerHTML = "";
+  const start = (currentPage-1)*entries;
+  const end = start + entries;
+  const pageData = leads.slice(start,end);
+
+  if(pageData.length===0){
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No leads available.</td></tr>';
+  } else {
+    pageData.forEach((l,i)=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${l.name}</td><td>${l.email}</td><td>${l.phone}</td><td>${l.message}</td><td>${l.source}</td><td>${l.status}</td><td>${l.date}</td>
+        <td>
+          <button onclick="editLead(${i})">Edit</button>
+          <button onclick="deleteLead(${i})">Delete</button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+  }
+  document.getElementById('pageInfo').innerText = `${currentPage} / ${Math.max(1,Math.ceil(leads.length/entries))}`;
+}
+
+// Recruit dropdown
+function toggleRecruitDropdown(event){
+  event.preventDefault();
+  const content = event.currentTarget.nextElementSibling;
+  const arrow = event.currentTarget.querySelector('.arrow');
+  content.style.display = content.style.display === "flex" ? "none" : "flex";
+  arrow.classList.toggle("rotate");
+}
+
+// Pagination
+function changeEntries(){ entries=parseInt(document.getElementById('entriesPerPage').value); currentPage=1; renderTable(); }
+function prevPage(){ if(currentPage>1) currentPage--; renderTable(); }
+function nextPage(){ if(currentPage < Math.ceil(leads.length/entries)) currentPage++; renderTable(); }
+
+// Search
+function searchTable(){
+  const term = document.getElementById('searchInput').value.toLowerCase();
+  currentPage=1;
+  renderTable();
+}
+
+// Filters
+function applyFilters(){ alert('Filters applied'); }
+function resetFilters(){ location.reload(); }
+
+// Actions
+function addLead(){ 
+  const name = prompt('Enter lead name:');
+  if(!name) return;
+  leads.push({name:name,email:'',phone:'',message:'',source:'Website',status:'Pending',date:new Date().toISOString().split('T')[0]});
+  renderTable();
+}
+function editLead(i){ alert('Edit lead: '+leads[i].name); }
+function deleteLead(i){ if(confirm('Delete lead '+leads[i].name+'?')) { leads.splice(i,1); renderTable(); } }
+
+// Excel / Print
+function exportExcel(){ alert('Export Excel'); }
+function printTable(){ window.print(); }
+
+renderTable();
+</script>
+
+</body>
+</html>

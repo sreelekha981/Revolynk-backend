@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Job Postings Dashboard</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/style.min.css">
+</head>
+<body>
+
+<div class="header">
+  <div class="logo"><img src="assets/images/logos/logo.png" alt="Logo"></div>
+  <div class="user" onclick="toggleDropdown()">
+    <i class="fa-solid fa-user-circle"></i>
+    <span>Venu</span>
+    <div class="user-dropdown" id="userDropdown"><a href="login.html">Logout</a></div>
+  </div>
+</div>
+
+<div class="page-layout">
+  <div class="sidebar">
+    <h2><a href="dashboard.html">Dashboard</a></h2>
+    <ul>
+      <li><a href="dashboard.html"><i class="fa-solid fa-chart-line"></i> Insights</a></li>
+      <li class="dropdown">
+        <a href="#" onclick="toggleRecruitDropdown(event)">
+          <i class="fa-solid fa-briefcase"></i> Recruit
+          <i class="fa-solid fa-angle-right arrow"></i>
+        </a>
+        <div class="dropdown-content" style="display:none; margin-left:20px;">
+          <a href="job-postings.html"><i class="fa-solid fa-file-lines"></i> Job Postings</a>
+          <a href="job-applications.html"><i class="fa-solid fa-envelope-open-text"></i> Job Applications</a>
+        </div>
+      </li>
+      <li><a href="case-studies.html"><i class="fa-solid fa-folder-open"></i> Case Studies</a></li>
+      <li><a href="leads.html"><i class="fa-solid fa-user-group"></i> Leads</a></li>
+      <li><a href="user.html"><i class="fa-solid fa-users"></i> Users</a></li>
+    </ul>
+  </div>
+
+  <div class="main-container">
+    <div class="card">
+      <div class="title-row">
+        <h2>Job Postings</h2>
+        <button class="add-btn" onclick="window.location.href='job-posting-form.html'">+ Add Job Posting</button>
+      </div>
+
+      <div class="top-controls">
+        <div class="left-icon">
+          <button class="icon-btn"><i class="fa-solid fa-table-cells-large"></i></button>
+          <div class="tooltip">Title, Department, Type, Posted On, Status</div>
+        </div>
+        <div class="right-controls">
+          <button onclick="exportExcel()">Excel</button>
+          <button onclick="printTable()">Print</button>
+          <input type="text" id="searchInput" placeholder="Search job postings..." oninput="searchTable()"/>
+        </div>
+      </div>
+
+      <div class="filters">
+        <select id="filterDept">
+          <option value="">--Department--</option>
+          <option>Marketing</option>
+          <option>Development</option>
+          <option>Design</option>
+          <option>HR</option>
+        </select>
+        <select id="filterType">
+          <option value="">--Job Type--</option>
+          <option>Full Time</option>
+          <option>Part Time</option>
+          <option>Contract</option>
+        </select>
+        <select id="filterStatus">
+          <option value="">--Status--</option>
+          <option>Open</option>
+          <option>Closed</option>
+          <option>Archived</option>
+        </select>
+        <input type="date" id="filterDate">
+        <div class="actions">
+          <button class="yes" onclick="applyFilters()"><i class="fa-solid fa-check"></i></button>
+          <button class="no" onclick="resetFilters()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+
+      <table id="jobsTable">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Department</th>
+            <th>Type</th>
+            <th>Posted On</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="6" style="text-align:center;">No job postings available.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="pagination">
+        <div>
+          Show
+          <select id="entriesPerPage" onchange="changeEntries()">
+            <option>10</option>
+            <option>20</option>
+            <option>50</option>
+          </select>
+          entries
+        </div>
+        <div>
+          <button onclick="prevPage()">&lt;</button>
+          <span id="pageInfo">0 / 0</span>
+          <button onclick="nextPage()">&gt;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// User dropdown
+function toggleDropdown() {
+  const dropdown = document.getElementById('userDropdown');
+  dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
+}
+window.addEventListener('click', function(e) {
+  const user = document.querySelector('.user');
+  const dropdown = document.getElementById('userDropdown');
+  if (!user.contains(e.target)) dropdown.style.display = 'none';
+});
+
+// Recruit dropdown toggle
+function toggleRecruitDropdown(event) {
+  event.preventDefault();
+  const content = event.currentTarget.nextElementSibling;
+  const arrow = event.currentTarget.querySelector('.arrow');
+  content.style.display = content.style.display === "block" ? "none" : "block";
+  arrow.classList.toggle("rotate");
+}
+
+// Jobs Data
+let jobs = JSON.parse(localStorage.getItem('jobsData')) || [];
+let currentPage = 1;
+let entries = 10;
+
+// Render table
+function renderTable() {
+  const tbody = document.querySelector("#jobsTable tbody");
+  tbody.innerHTML = "";
+  const start = (currentPage-1)*entries;
+  const end = start + entries;
+  const pageData = jobs.slice(start,end);
+
+  const searchText = document.getElementById('searchInput')?.value.toLowerCase() || '';
+  const filterDept = document.getElementById('filterDept')?.value;
+  const filterType = document.getElementById('filterType')?.value;
+  const filterStatus = document.getElementById('filterStatus')?.value;
+  const filterDate = document.getElementById('filterDate')?.value;
+
+  let filteredData = pageData.filter(job => {
+    return (
+      job.title.toLowerCase().includes(searchText) &&
+      (filterDept==="" || job.dept===filterDept) &&
+      (filterType==="" || job.type===filterType) &&
+      (filterStatus==="" || job.status===filterStatus) &&
+      (filterDate==="" || job.date===filterDate)
+    );
+  });
+
+  if(filteredData.length===0){
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No job postings available.</td></tr>';
+  } else {
+    filteredData.forEach((job,i)=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${job.title}</td><td>${job.dept}</td><td>${job.type}</td><td>${job.date}</td><td>${job.status}</td>
+      <td>
+        <button onclick="editJob(${start+i})">Edit</button>
+        <button onclick="deleteJob(${start+i})">Delete</button>
+      </td>`;
+      tbody.appendChild(tr);
+    });
+  }
+  document.getElementById('pageInfo').innerText = `${currentPage} / ${Math.max(1,Math.ceil(jobs.length/entries))}`;
+}
+
+// Edit / Delete
+function editJob(i){
+    // Save job data to localStorage and redirect to form page
+    localStorage.setItem('editJobData', JSON.stringify(jobs[i]));
+    localStorage.setItem('editJobIndex', i);
+    window.location.href = 'job-posting-form.html';
+}
+function deleteJob(i){ if(confirm('Delete job "'+jobs[i].title+'"?')) { jobs.splice(i,1); localStorage.setItem('jobsData',JSON.stringify(jobs)); renderTable(); } }
+
+// Pagination
+function changeEntries(){ entries=parseInt(document.getElementById('entriesPerPage').value); currentPage=1; renderTable(); }
+function prevPage(){ if(currentPage>1) currentPage--; renderTable(); }
+function nextPage(){ if(currentPage < Math.ceil(jobs.length/entries)) currentPage++; renderTable(); }
+
+// Search / Filters
+function searchTable(){ currentPage=1; renderTable(); }
+function applyFilters(){ currentPage=1; renderTable(); }
+function resetFilters(){ document.getElementById('filterDept').value=""; document.getElementById('filterType').value=""; document.getElementById('filterStatus').value=""; document.getElementById('filterDate').value=""; renderTable(); }
+
+// Excel Export
+function exportExcel() {
+  if(jobs.length===0){ alert('No data to export'); return; }
+  let csv = 'Title,Department,Type,Posted On,Status\n';
+  jobs.forEach(job=>{ csv += `${job.title},${job.dept},${job.type},${job.date},${job.status}\n`; });
+  const blob = new Blob([csv], {type: 'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'job_postings.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Print
+function printTable() {
+  let printContents = document.querySelector('.main-container').innerHTML;
+  let originalContents = document.body.innerHTML;
+  document.body.innerHTML = printContents;
+  window.print();
+  document.body.innerHTML = originalContents;
+  location.reload();
+}
+
+renderTable();
+</script>
+</body>
+</html>
