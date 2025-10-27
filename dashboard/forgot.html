@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forgot Password</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/dashboard/assets/css/style.css">
+</head>
+<body>
+
+<div class="card">
+  <img src="/dashboard/assets/images/logo/logo.png" alt="Forgot Password Icon">
+
+  <div id="step1">
+    <div class="error" id="emailError"></div>
+    <form id="forgotForm" onsubmit="event.preventDefault(); sendOTP();">
+    <input type="email" id="email" placeholder="Enter your Email ID" required>
+    <button id="otpBtn" onclick="sendOTP()">Send OTP</button>
+    </form>
+    <a class="login-link" href="login.html">Login</a>
+
+    <div id="otpSection" class="hidden">
+      <div class="error" id="otpError"></div>
+      <input type="text" id="otpInput" placeholder="Enter OTP" required>
+      <button onclick="verifyOTP()">Verify OTP</button>
+    </div>
+  </div>
+
+  <div id="step3" class="hidden">
+    <div class="error" id="passError"></div>
+    <input type="password" id="newPass" placeholder="New Password" required>
+    <input type="password" id="confirmPass" placeholder="Confirm Password" required>
+    <button onclick="resetPassword()">Reset Password</button>
+  </div>
+</div>
+
+<!-- <script>
+async function sendOTP() {
+  const email = document.getElementById('email').value.trim();
+  const emailError = document.getElementById('emailError');
+  const otpSection = document.getElementById('otpSection');
+  const otpBtn = document.getElementById('otpBtn');
+
+  emailError.textContent = '';
+
+  if (!email) {
+    emailError.textContent = "Please enter your email.";
+    return;
+  }
+
+  try {
+    const response = await fetch('http://localhost:8080/api/auth/forgot-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: "email=" + encodeURIComponent(email)
+    });
+
+    const result = await response.text();
+
+    if (!response.ok) {
+      emailError.textContent = result;
+      return;
+    }
+
+    alert(result); // e.g. "OTP has been sent to your email"
+    otpSection.classList.remove('hidden');
+    otpSection.classList.add('fade-in');
+    otpBtn.textContent = "Resend OTP";
+
+  } catch (err) {
+    emailError.textContent = "Error sending OTP. Try again.";
+    console.error(err);
+  }
+} -->
+<script>
+async function sendOTP() {
+  const email = document.getElementById('email').value.trim();
+  const emailError = document.getElementById('emailError');
+  const otpSection = document.getElementById('otpSection');
+  const otpBtn = document.getElementById('otpBtn');
+
+  emailError.textContent = '';
+
+  if (!email) {
+    emailError.textContent = "Please enter your email.";
+    return;
+  }
+
+  otpBtn.disabled = true; // disable button immediately
+  otpBtn.textContent = "Sending...";
+
+  try {
+    const response = await fetch('http://localhost:8080/api/auth/forgot-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: "email=" + encodeURIComponent(email)
+    });
+
+    const result = await response.text();
+
+    if (!response.ok) {
+      emailError.textContent = result;
+      otpBtn.disabled = false;
+      otpBtn.textContent = "Send OTP";
+      return;
+    }
+
+    alert(result); // e.g. "OTP has been sent to your email"
+    otpSection.classList.remove('hidden');
+    otpSection.classList.add('fade-in');
+
+    // start 30-second timer
+    startResendTimer(otpBtn);
+
+  } catch (err) {
+    emailError.textContent = "Error sending OTP. Try again.";
+    console.error(err);
+    otpBtn.disabled = false;
+    otpBtn.textContent = "Send OTP";
+  }
+}
+
+// ✅ Timer logic
+function startResendTimer(button) {
+  let timeLeft = 30;
+  button.disabled = true;
+  button.style.backgroundColor = "#888"; // greyed out for clarity
+  button.textContent = `Resend in ${timeLeft}s`;
+
+  const timer = setInterval(() => {
+    timeLeft--;
+    button.textContent = `Resend in ${timeLeft}s`;
+
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      button.disabled = false;
+      button.style.backgroundColor = "#007BFF"; // restore blue color
+      button.textContent = "Resend OTP";
+    }
+  }, 1000);
+}
+
+
+async function verifyOTP() {
+    const email = document.getElementById('email').value.trim();
+    const otp = document.getElementById('otpInput').value.trim();
+    const otpError = document.getElementById('otpError');
+
+    otpError.textContent = '';
+
+    if (!otp) {
+        otpError.textContent = "Please enter the OTP.";
+        return;
+    }
+
+    try {
+        const response = await fetch('http://localhost:8080/api/auth/verify-otp', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: `email=${encodeURIComponent(email)}&otp=${encodeURIComponent(otp)}`
+        });
+
+        const result = await response.text();
+
+        if (!response.ok) {
+            otpError.textContent = result;
+            return;
+        }
+
+        alert(result);
+        document.getElementById('step1').classList.add('hidden');
+        document.getElementById('step3').classList.remove('hidden');
+
+    } catch (err) {
+        otpError.textContent = "Error verifying OTP. Try again.";
+        console.error(err);
+    }
+}
+
+async function resetPassword() {
+    const email = document.getElementById('email').value.trim();
+    const newPass = document.getElementById('newPass').value.trim();
+    const confirmPass = document.getElementById('confirmPass').value.trim();
+    const passError = document.getElementById('passError');
+
+    passError.textContent = '';
+
+    if (!newPass || !confirmPass) {
+        passError.textContent = "Please fill all password fields.";
+        return;
+    }
+
+    if (newPass.length < 6) {
+        passError.textContent = "Password must be at least 6 characters.";
+        return;
+    }
+
+    if (newPass !== confirmPass) {
+        passError.textContent = "Passwords do not match.";
+        return;
+    }
+
+    try {
+        const response = await fetch('http://localhost:8080/api/auth/change-password', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: `email=${encodeURIComponent(email)}&newPassword=${encodeURIComponent(newPass)}&confirmPassword=${encodeURIComponent(confirmPass)}`
+        });
+
+        const result = await response.text();
+
+        if (!response.ok) {
+            passError.textContent = result;
+            return;
+        }
+
+        alert(result);
+        window.location.href = "login.html";
+
+    } catch (err) {
+        passError.textContent = "Error resetting password. Try again.";
+        console.error(err);
+    }
+}
+
+</script>
+
+</body>
+</html>
