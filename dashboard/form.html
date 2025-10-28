@@ -76,7 +76,7 @@
     </form>
 
     <!-- Case Study Form -->
-    <form id="CaseStudyForm" class="content-form">
+    <!-- <form id="CaseStudyForm" class="content-form">
       <h2>Add Case Study</h2>
       <label>Main Heading</label><input type="text">
       <label>Subtitle</label><textarea></textarea>
@@ -97,7 +97,7 @@
       <h3>Accordion Sections</h3><div id="csAccordionContainer"><div class="item"><label>Accordion Title</label><input type="text"><label>Accordion Description</label><textarea></textarea></div></div>
       <button type="button" class="add-btn" onclick="addAccordion('csAccordionContainer')">+ Add Accordion</button>
       <button type="submit">Submit Case Study</button>
-    </form>
+    </form> -->
 
    <!-- Live Interview Form -->
 <form id="LiveInterviewForm" class="content-form" onsubmit="return validateInterviewForm(event)">
@@ -106,11 +106,11 @@
   <label>Interview Title</label>
   <input type="text" maxlength="100" required>
 
-  <label>Topic</label>
-  <input type="text" maxlength="100" required>
+ <label>Topic</label>
+  <input type="text" class="auto-topic" maxlength="100" required>
 
   <label>Industry</label>
-  <input type="text" maxlength="100" required>
+  <input type="text" class="auto-industry" maxlength="100" required>
 
   <label>Date</label>
   <input type="date" required>
@@ -120,7 +120,6 @@
     <div class="qa-section">
       <label>Title</label>
       <input type="text" class="qa-question" maxlength="100" required>
-
       <label>Content</label>
       <textarea class="qa-answer" maxlength="350" required></textarea>
     </div>
@@ -145,7 +144,6 @@
     <div class="question-block">
       <label>Question 1</label>
       <input type="text" maxlength="100" required>
-
       <label>Answer 1</label>
       <textarea maxlength="350" required></textarea>
     </div>
@@ -313,7 +311,7 @@
   <input type="date" required>
 
   <div id="episodesContainer"></div>
-  <button type="button" class="add-btn" onclick="addEpisode()">+ Add Episode</button>
+  <button type="button" class="add-btn" onclick="addEpisode()">+ Add Podcast</button>
   <button type="submit">Submit Podcast</button>
 </form>
 

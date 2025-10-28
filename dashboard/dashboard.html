@@ -20,11 +20,15 @@
 <body>
 
 <div class="header">
-  <div class="logo"><img src="assets/images/logos/logo.png" alt="Logo"></div>
+  <div class="logo">
+    <img src="assets/images/logos/logo.png" alt="Logo">
+  </div>
   <div class="user" onclick="toggleDropdown()">
     <i class="fa-solid fa-user-circle"></i>
     <span>Venu</span>
-    <div  id="logoutBtn">Logout</div>
+    <div class="user-dropdown" id="userDropdown">
+      <button id="logoutBtn" type="button" class="logout-btn">Logout</button>
+    </div>
   </div>
 </div>
 
@@ -167,7 +171,61 @@ window.addEventListener('click', function(e) {
   const dropdown = document.getElementById('userDropdown');
   if (!user.contains(e.target)) dropdown.style.display = 'none';
 });
+document.addEventListener("DOMContentLoaded", () => {
+  const editData = localStorage.getItem("editInsight");
+  if (!editData) return; // Not editing
 
+  const item = JSON.parse(editData);
+  console.log("Editing record:", item);
+
+  // Example: show the right form based on content type
+  const allForms = document.querySelectorAll(".content-form");
+  allForms.forEach(form => form.style.display = "none");
+
+  let formToShow = null;
+
+  switch (item.type.toLowerCase()) {
+    case "blogs":
+      formToShow = document.getElementById("blogForm");
+      break;
+    case "case study":
+      formToShow = document.getElementById("caseStudyForm");
+      break;
+    case "live interviews":
+      formToShow = document.getElementById("liveInterviewForm");
+      break;
+    case "news articles":
+      formToShow = document.getElementById("newsForm");
+      break;
+    case "perspective":
+      formToShow = document.getElementById("perspectiveForm");
+      break;
+    case "podcast":
+      formToShow = document.getElementById("podcastForm");
+      break;
+    case "research reports":
+      formToShow = document.getElementById("researchReportForm");
+      break;
+  }
+
+  if (formToShow) {
+    formToShow.style.display = "block";
+
+    // Prefill example fields (adjust to your real input names)
+    const titleInput = formToShow.querySelector('input[name="title"]');
+    const topicInput = formToShow.querySelector('input[name="topic"]');
+    const industryInput = formToShow.querySelector('input[name="industry"]');
+    const dateInput = formToShow.querySelector('input[name="date"]');
+
+    if (titleInput) titleInput.value = item.title || "";
+    if (topicInput) topicInput.value = item.topic || "";
+    if (industryInput) industryInput.value = item.industry || "";
+    if (dateInput) dateInput.value = item.date || "";
+  }
+
+  // Optionally clear localStorage after loading
+  // localStorage.removeItem("editInsight");
+});
  function toggleDropdown(event) {
       event.preventDefault();
       const dropdown = event.currentTarget.parentElement;
