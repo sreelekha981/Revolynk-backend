@@ -83,3 +83,9 @@ button[type="submit"]:hover,.btn-add-section:hover,.add-btn:hover,.add-question:
   text-align: center;
 }
 
+.modal-backdrop {
+  z-index: 1040 !important;
+}
+.modal {
+  z-index: 1050 !important;
+}

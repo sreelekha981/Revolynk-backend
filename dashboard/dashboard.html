@@ -1,20 +1,340 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome | Revolynk</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../static/css/style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Insights</title>
+
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  rel="stylesheet"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+  rel="stylesheet"
+/>
+<link rel="stylesheet" href="assets/css/style.min.css">
+
+
 </head>
 <body>
-  <div class="dashboard">
-    <h2>Welcome to Revolynk Dashboard</h2>
-    <button id="logoutBtn">Logout</button>
+
+<div class="header">
+  <div class="logo">
+    <img src="assets/images/logos/logo.png" alt="Logo">
+  </div>
+  <div class="user" onclick="toggleDropdown()">
+    <i class="fa-solid fa-user-circle"></i>
+    <span>Venu</span>
+    <div class="user-dropdown" id="userDropdown">
+      <button id="logoutBtn" type="button" class="logout-btn">Logout</button>
+    </div>
+  </div>
+</div>
+
+<div class="page-layout">
+    <div class="sidebar">
+    <h2><a href="dashboard.html">Dashboard</a></h2>
+    <ul>
+      <li><a href="dashboard.html"><i class="fa-solid fa-chart-line"></i> Insights</a></li>
+
+      <!-- Recruit Dropdown -->
+      <li class="dropdown">
+        <a href="#" onclick="toggleDropdown(event)">
+          <i class="fa-solid fa-briefcase"></i> Recruit
+          <i class="fa-solid fa-angle-right arrow"></i>
+        </a>
+        <div class="dropdown-content">
+          <a href="job-postings.html"><i class="fa-solid fa-file-lines"></i> Job Postings</a>
+          <a href="job-applications.html"><i class="fa-solid fa-envelope-open-text"></i> Job Applications</a>
+        </div>
+      </li>
+
+      <li><a href="case-studies.html"><i class="fa-solid fa-folder-open"></i> Case Studies</a></li>
+      <li><a href="leads.html"><i class="fa-solid fa-user-group"></i> Leads</a></li>
+      <li><a href="user.html"><i class="fa-solid fa-users"></i> Users</a></li>
+    </ul>
   </div>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
+  <div class="main-container">
+    <div class="card">
+      <div class="title-row">
+        <h2>Insights </h2>
+        <button class="add-btn" onclick="window.location.href='form.html'">+ Add Insight</button>
+      </div>
+
+      <div class="top-controls">
+        <div class="left-icon">
+          <button class="icon-btn"><i class="fa-solid fa-table-cells-large"></i></button>
+          <div class="tooltip">Title, Topic, Industry, Content Type, Posted On, Status</div>
+        </div>
+        <div class="right-controls">
+          <button onclick="exportExcel()">Excel</button>
+          <button onclick="printTable()">Print</button>
+          <input type="text" id="searchInput" placeholder="Search insights..." oninput="searchInsights()"/>
+        </div>
+      </div>
+
+      <div class="filters">
+        <select id="filterTopic">
+          <option value="">--Topic--</option>
+          <option>AI & Data Analytics</option>
+          <option>Cloud Services</option>
+          <option>Cyber Security</option>
+          <option>Web & Mobile Apps</option>
+          <option>Marketing & Experience</option>
+          <option>Tech Consulting</option>
+          <option>VFX & Game Design</option>
+        </select>
+        <select id="filterIndustry">
+          <option value="">--Industry--</option>
+          <option>Aviation</option>
+          <option>Automotive</option>
+          <option>Banking</option>
+          <option>Chemicals</option>
+          <option>Media & Communication</option>
+          <option>Consumer Goods</option>
+          <option>Healthcare</option>
+          <option>Industrial</option>
+          <option>Investment & Insurance</option>
+          <option>Retail Industry</option>
+          <option>IT</option>
+          <option>Tourism & Travel</option>
+          <option>Utilities</option>
+          <option>Cosmetics</option>
+        </select>
+        <select id="filterContent">
+          <option value="">--Content Type--</option>
+          <option>Blogs</option>
+          <option>Case Study</option>
+          <option>Live Interviews</option>
+          <option>News Articles</option>
+          <option>Perspective</option>
+          <option>Podcast</option>
+          <option>Research Reports</option>
+        </select>
+        <input type="date" id="filterDate">
+        <div class="actions">
+          <button class="yes" onclick="applyFilters()"><i class="fa-solid fa-check"></i></button>
+          <button class="no" onclick="resetFilters()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+
+      <table id="insightsTable">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Topic</th>
+            <th>Industry</th>
+            <th>Content Type</th>
+            <th>Posted On</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="7" style="text-align:center;">No insights available.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="pagination">
+        <div>
+          Show 
+          <select id="entriesPerPage" onchange="changeEntries()">
+            <option>10</option>
+            <option>20</option>
+            <option>50</option>
+          </select> entries
+        </div>
+        <div>
+          <button onclick="prevPage()">&lt;</button>
+          <span id="pageInfo">0 / 0</span>
+          <button onclick="nextPage()">&gt;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src = "assets/js/Insights.js"></script>
+<script src = "assets/js/perspective.js"></script>
+<script>
+let insights = [];
+let currentPage = 1;
+let entries = 10;
+
+// User dropdown
+function toggleDropdown() {
+  const dropdown = document.getElementById('userDropdown');
+  dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
+}
+window.addEventListener('click', function(e) {
+  const user = document.querySelector('.user');
+  const dropdown = document.getElementById('userDropdown');
+  if (!user.contains(e.target)) dropdown.style.display = 'none';
+});
+
+ function toggleDropdown(event) {
+      event.preventDefault();
+      const dropdown = event.currentTarget.parentElement;
+      const content = dropdown.querySelector(".dropdown-content");
+      const arrow = dropdown.querySelector(".arrow");
+
+      // Toggle dropdown visibility
+      content.style.display = content.style.display === "block" ? "none" : "block";
+      arrow.classList.toggle("rotate");
+    }
+//render
+document.addEventListener("DOMContentLoaded", () => {
+  loadAllInsights();
+});
+
+
+
+// ✅ Fetch ALL insights (blogs, interviews, podcasts, etc.)
+async function loadAllInsights() {
+  insights = []; // clear existing data first
+
+  const endpoints = [
+    { url: "http://localhost:8080/api/blogs/add", type: "Blog" },
+    { url: "http://localhost:8080/api/live-interviews", type: "Live Interview" },
+    { url: "http://localhost:8080/api/news", type: "NewsArticle"},
+    { url: "http://localhost:8080/api/perspectives", type: "Perspective" },
+    { url: "http://localhost:8080/api/research", type: "Research" },
+    { url: "http://localhost:8080/api/podcasts", type: "Podcast" }
+  ];
+
+  try {
+    const results = await Promise.allSettled(
+      endpoints.map(e => fetch(e.url).then(r => r.json()))
+    );
+
+    results.forEach((res, i) => {
+      if (res.status === "fulfilled" && Array.isArray(res.value)) {
+        const { type } = endpoints[i];
+        // combine all into one big array
+        insights.push(
+          ...res.value.map(item => ({
+            id: item.id,
+            title: item.title || item.interviewTitle ||  item.articleTitle || "Untitled",
+            topic: item.topic || "-",
+            industry: item.industry || "-",
+            type,
+            date: item.date || "-",
+            status: "Published"
+          }))
+        );
+      }
+    });
+
+    renderTable(); // show everything
+  } catch (err) {
+    console.error("❌ Failed to load insights:", err);
+  }
+}
+
+
+// ✅ Render the table
+function renderTable() {
+  const tbody = document.querySelector("#insightsTable tbody");
+  tbody.innerHTML = "";
+
+  const start = (currentPage - 1) * entries;
+  const end = start + entries;
+  const pageData = insights.slice(start, end);
+
+  if (pageData.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No insights available.</td></tr>';
+  } else {
+    pageData.forEach((item, i) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${item.title}</td>
+        <td>${item.topic}</td>
+        <td>${item.industry}</td>
+        <td>${item.type}</td>
+        <td>${item.date}</td>
+        <td>${item.status}</td>
+        <td>
+          <button onclick="editInsight(${i})">✏ Edit</button>
+          <button onclick="deleteInsight(${i})">🗑 Delete</button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  document.getElementById("pageInfo").innerText =
+    `${currentPage} / ${Math.max(1, Math.ceil(insights.length / entries))}`;
+}
+
+
+// ✅ Edit button
+function editInsight(index) {
+  const item = insights[index];
+  let typeParam = item.type.toLowerCase().replace(" ", "-");
+  window.location.href = `form.html?type=${typeParam}&id=${item.id}`;
+}
+
+
+// ✅ Delete button (works for all types)
+async function deleteInsight(index) {
+  const item = insights[index];
+  if (!confirm(`Delete this ${item.type}?`)) return;
+
+  const typeUrls = {
+    "Blog": "blogs",
+    "Live Interview": "live-interviews",
+    "Perspective": "perspectives",
+    "Research": "research",
+    "Podcast": "podcasts",
+    "NewsArticle": "newsArticle"
+  };
+
+  const endpoint = typeUrls[item.type];
+  const res = await fetch(`http://localhost:8080/api/${endpoint}/${item.id}`, {
+    method: "DELETE"
+  });
+
+  if (res.ok) {
+    alert(`${item.type} deleted successfully`);
+    loadAllInsights();
+  } else {
+    alert(`Failed to delete ${item.type}`);
+  }
+}
+
+
+
+
+// Pagination
+function changeEntries(){ entries=parseInt(document.getElementById('entriesPerPage').value); currentPage=1; renderTable(); }
+function prevPage(){ if(currentPage>1) currentPage--; renderTable(); }
+function nextPage(){ if(currentPage < Math.ceil(insights.length/entries)) currentPage++; renderTable(); }
+
+// Search
+function searchInsights(){ currentPage=1; renderTable(); }
+
+// Filters
+function applyFilters(){ alert('Filters applied'); }
+function resetFilters(){ location.reload(); }
+
+// Actions
+function addInsight(){ 
+  const title = prompt('Enter insight title:');
+  if(!title) return;
+  insights.push({title:title, topic:'AI & Data Analytics', industry:'IT', type:'Blogs', status:'Active', date:new Date().toISOString().split('T')[0]});
+  renderTable();
+}
+function editInsight(i){ alert('Edit insight: '+insights[i].title); }
+function deleteInsight(i){ if(confirm('Delete insight '+insights[i].title+'?')){ insights.splice(i,1); renderTable(); } }
+
+// Excel / Print
+function exportExcel(){ alert('Export Excel'); }
+function printTable(){ window.print(); }
+
+renderTable();
+
+ document.addEventListener("DOMContentLoaded", () => {
       const token = localStorage.getItem("jwtToken");
       if (!token) {
         window.location.href = "login.html";
@@ -69,6 +389,8 @@
     document.addEventListener("click", resetInactivityTimer);
 
     startInactivityTimer();
-  </script>
+</script>
+
+<script src = "assets/js/podcast.js"></script>
 </body>
 </html>

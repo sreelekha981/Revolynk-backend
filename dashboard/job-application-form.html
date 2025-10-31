@@ -1077,6 +1077,124 @@
     <script src="../assets/js/slider-init.js"></script>
     <script src="../assets/js/main.js"></script>
     <script src="../assets/js/tp-cursor.js"></script>
+   <!-- <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.querySelector(".apply-form");
+  console.log("Form found:", !!form);
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    console.log("Form submitted!");
+
+    const formData = new FormData();
+    const application = {
+      firstName: document.querySelector('input[placeholder="Enter your first name"]').value,
+      middleName: document.querySelector('input[placeholder="Enter your middle name"]').value,
+      lastName: document.querySelector('input[placeholder="Enter your last name"]').value,
+      phone: document.querySelector('input[placeholder="Enter your phone number"]').value,
+      email: document.querySelector('input[placeholder="Enter your email"]').value,
+      gender: document.querySelector('select[required]').value,
+      expYears: document.querySelector('input[placeholder="Years"]').value,
+      expMonths: document.querySelector('input[placeholder="Months"]').value,
+      currentSalary: document.querySelector('input[placeholder="Enter current salary (INR)"]').value,
+      expectedSalary: document.querySelector('input[placeholder="Enter expected salary (INR)"]').value,
+      currentLocation: document.querySelector('input[placeholder="Enter your current location"]').value,
+      noticePeriod: document.querySelector('#education-section select')?.value || "",
+      skills: document.querySelector('input[placeholder*="key skills"]').value,
+      relocate: document.querySelector('select[required]').value
+    };
+
+    console.log("Application object:", application);
+
+    formData.append("application", new Blob([JSON.stringify(application)], { type: "application/json" }));
+
+    const resumeFile = document.getElementById("resume").files[0];
+    if (resumeFile) formData.append("resume", resumeFile);
+
+    try {
+      const response = await fetch("http://localhost:8080/api/applications", {
+        method: "POST",
+        body: formData
+      });
+
+      console.log("Response status:", response.status);
+
+      if (response.ok) {
+        alert("✅ Application submitted successfully!");
+        window.location.href = "dashboard.html";
+      } else {
+        const text = await response.text();
+        console.error("Server error:", text);
+        alert("❌ Error saving application. Check console.");
+      }
+    } catch (err) {
+      console.error("⚠️ Network error:", err);
+      alert("Network error — check backend console.");
+    }
+  });
+});
+</script> -->
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.querySelector(".apply-form");
+
+  if (!form) {
+    console.error("Form not found!");
+    return;
+  }
+
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const formData = new FormData();
+
+    // collect form fields
+    const application = {
+      firstName: form.querySelector('input[placeholder="Enter your first name"]').value,
+      middleName: form.querySelector('input[placeholder="Enter your middle name"]').value,
+      lastName: form.querySelector('input[placeholder="Enter your last name"]').value,
+      email: form.querySelector('input[type="email"]').value,
+      phone: form.querySelector('input[type="tel"]').value,
+      gender: form.querySelector('select[required]').value,
+      experienceYears: form.querySelector('.exp-inputs input[placeholder="Years"]').value,
+      experienceMonths: form.querySelector('.exp-inputs input[placeholder="Months"]').value,
+      currentSalary: form.querySelector('input[placeholder="Enter current salary (INR)"]').value,
+      expectedSalary: form.querySelector('input[placeholder="Enter expected salary (INR)"]').value,
+      currentLocation: form.querySelector('input[placeholder="Enter your current location"]').value,
+      skills: form.querySelector('input[placeholder="Add your key skills (comma-separated)"]').value,
+      willingToRelocate: form.querySelector('select[required]').value
+    };
+
+    // append JSON data as a Blob
+    formData.append("data", new Blob([JSON.stringify(application)], { type: "application/json" }));
+
+    // append resume file if selected
+    const resumeFile = document.querySelector("#resume").files[0];
+    if (resumeFile) {
+      formData.append("resume", resumeFile);
+    }
+
+    try {
+      const response = await fetch("http://localhost:8080/api/applications", {
+        method: "POST",
+        body: formData
+      });
+
+      if (response.ok) {
+        alert("Application submitted successfully!");
+        form.reset();
+      } else {
+        alert("Error submitting form: " + response.status);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Something went wrong!");
+    }
+  });
+});
+</script>
+
   </body>
   
 </html>

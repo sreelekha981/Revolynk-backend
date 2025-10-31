@@ -56,27 +56,49 @@
     <!-- ALL FORMS START HERE -->
 
     <!-- Blog Form -->
-    <form id="BlogForm" class="content-form">
-      <h2>Add Blog</h2>
-      <label>Title</label><input type="text" id="title-blog">
-      <label>Topic</label><input type="text" class="auto-topic" readonly>
-      <label>Industry</label><input type="text" class="auto-industry" readonly>
-      <label>Date</label><input type="date">
-      <label>Intro Paragraph</label><textarea></textarea>
-      <h3>Additional Sections</h3><div id="blogContentContainer"><div class="item"><label>Section Title</label><input type="text"><label>Section Content</label><textarea></textarea></div></div>
-      <button type="button" class="add-btn" onclick="addSection('blogContentContainer')">+ Add Section</button>
-      <label>Upload Image</label><input type="file">
-      <label>Paragraph after Image</label><textarea></textarea>
-      <h3>Accordion Sections</h3><div id="blogAccordionContainer"><div class="item"><label>Accordion Title</label><input type="text"><label>Accordion Description</label><textarea></textarea></div></div>
-      <button type="button" class="add-btn" onclick="addAccordion('blogAccordionContainer')">+ Add Accordion</button>
-            <label>Authors</label><div id="authorsContainer"><div class="author-item"><input type="text" placeholder="Author Name"><label>Designation</label><textarea></textarea><label>LinkedIn URL</label>
-    <input type="url" placeholder=""></div></div>
-      <button type="button" class="add-btn" onclick="addAuthor()">+ Add Author</button>
-      <button type="submit">Submit Blog</button>
-    </form>
+   <form id="BlogForm" enctype="multipart/form-data" class="content-form">
+  <h2>Add Blog</h2>
+
+  <label>Title</label>
+  <input type="text" id="title-blog" name="title" required>
+
+  <label>Topic</label>
+  <input type="text" id="topic" name="topic" class="auto-topic" required>
+
+  <label>Industry</label>
+  <input type="text" id="industry" name="industry" class="auto-industry" required>
+
+  <label>Date</label>
+  <input type="date" id="date" name="date" required>
+
+  <label>Intro Paragraph</label>
+  <textarea id="intro" name="introParagraph"></textarea>
+
+  <h3>Sections</h3>
+  <div id="blogContentContainer"></div>
+  <button type="button" onclick="addSection()">+ Add Section</button>
+
+  <label>Upload Image</label>
+  <input type="file" id="imageFile" name="imageFile">
+
+  <label>Paragraph after Image</label>
+  <textarea id="afterImage" name="paragraphAfterImage"></textarea>
+
+  <h3>Accordions</h3>
+  <div id="blogAccordionContainer"></div>
+  <button type="button" onclick="addAccordion()">+ Add Accordion</button>
+
+  <h3>Authors</h3>
+  <div id="authorsContainer"></div>
+  <button type="button" onclick="addAuthor()">+ Add Author</button>
+
+  <br><br>
+  <button type="submit">Submit Blog</button>
+</form>
+
 
     <!-- Case Study Form -->
-    <form id="CaseStudyForm" class="content-form">
+    <!-- <form id="CaseStudyForm" enctype="multipart/form-data">
       <h2>Add Case Study</h2>
       <label>Main Heading</label><input type="text">
       <label>Subtitle</label><textarea></textarea>
@@ -97,57 +119,56 @@
       <h3>Accordion Sections</h3><div id="csAccordionContainer"><div class="item"><label>Accordion Title</label><input type="text"><label>Accordion Description</label><textarea></textarea></div></div>
       <button type="button" class="add-btn" onclick="addAccordion('csAccordionContainer')">+ Add Accordion</button>
       <button type="submit">Submit Case Study</button>
-    </form>
+    </form> -->
 
    <!-- Live Interview Form -->
-<form id="LiveInterviewForm" class="content-form" onsubmit="return validateInterviewForm(event)">
+<form id="LiveInterviewForm" enctype="multipart/form-data" class="content-form">
   <h2>Live Interview</h2>
 
   <label>Interview Title</label>
-  <input type="text" maxlength="100" required>
+  <input type="text" name="interviewTitle" maxlength="100" required>
 
   <label>Topic</label>
-  <input type="text" maxlength="100" required>
+  <input type="text" name="topic" maxlength="100" required>
 
   <label>Industry</label>
-  <input type="text" maxlength="100" required>
+  <input type="text" name="industry" maxlength="100" required>
 
   <label>Date</label>
-  <input type="date" required>
+  <input type="date" name="date" required>
 
   <h3>Additional Sections</h3>
   <div id="qaSectionsContainer">
     <div class="qa-section">
       <label>Title</label>
-      <input type="text" class="qa-question" maxlength="100" required>
+      <input type="text" class="qa-title" name="qaTitle" maxlength="100" required>
 
       <label>Content</label>
-      <textarea class="qa-answer" maxlength="350" required></textarea>
+      <textarea class="qa-content" name="qaContent" maxlength="350" required></textarea>
     </div>
   </div>
-
   <button type="button" class="btn-add-section" onclick="addQASection()">+ Add Section</button>
 
   <label>Upload Image</label>
-  <input type="file" accept="image/*" required>
+  <input type="file" name="image" accept="image/*" required>
 
   <label>Quote / Highlight</label>
-  <textarea maxlength="350" required></textarea>
+  <textarea name="quote" maxlength="350" required></textarea>
 
   <label>Interviewee Name</label>
-  <input type="text" maxlength="100" required>
+  <input type="text" name="intervieweeName" maxlength="100" required>
 
   <label>Interviewee Designation</label>
-  <input type="text" maxlength="100" required>
+  <input type="text" name="intervieweeDesignation" maxlength="100" required>
 
   <h3>Questions</h3>
   <div id="interviewQuestionsContainer">
     <div class="question-block">
       <label>Question 1</label>
-      <input type="text" maxlength="100" required>
+      <input type="text" class="q-question" name="question1" maxlength="100" required>
 
       <label>Answer 1</label>
-      <textarea maxlength="350" required></textarea>
+      <textarea class="q-answer" name="answer1" maxlength="350" required></textarea>
     </div>
   </div>
 
@@ -155,244 +176,961 @@
   <button type="submit">Submit Interview</button>
 </form>
 
+
 <!-- News Article Form -->
-<form id="NewsArticleForm" class="content-form" onsubmit="return validateForm(event)">
-  <h2>News Article</h2>
+<form id="NewsArticleForm" enctype="multipart/form-data" class="content-form">
+    <h2>📰 Add News Article</h2>
 
-  <label>Article Title</label>
-  <input type="text" maxlength="100" required>
+    <label>Article Title</label>
+    <input type="text" name="articleTitle" required>
 
-  <label>Subtitle</label>
-  <textarea maxlength="350" required></textarea>
+    <label>Subtitle</label>
+    <input type="text" name="subtitle">
 
-  <label>Topic</label>
-  <input type="text" class="auto-topic" maxlength="100" required>
+    <label>Topic</label>
+    <input type="text" name="topic">
 
-  <label>Industry</label>
-  <input type="text" class="auto-industry" maxlength="100" required>
+    <label>Industry</label>
+    <input type="text" name="industry">
 
-  <label>Date</label>
-  <input type="date" required>
+    <label>Date</label>
+    <input type="date" name="date" required>
 
-  <label>Main Content</label>
-  <textarea maxlength="350" required></textarea>
+    <label>Main Content</label>
+    <textarea name="mainContent" required></textarea>
 
-  <h3>Bullet Points</h3>
-  <div id="newsBulletContainer">
-    <div class="list-item">
-      <input type="text" maxlength="100" placeholder="Bullet point" required>
-    </div>
-  </div>
-  <button type="button" class="add-item" onclick="addListItem('newsBulletContainer')">Add Bullet Item</button>
+    <label>Heading</label>
+    <input type="text" name="heading">
 
-  <label>Article Image</label>
-  <input type="file" accept="image/*" required>
+    <label>Description</label>
+    <textarea name="description"></textarea>
 
-  <h3>Additional Sections</h3>
-  <div id="faqFieldGroup">
-    <div class="faq-field">
-      <label>Heading</label>
-      <input type="text" class="faq-title" maxlength="100" required>
+    <label>Image</label>
+    <input type="file" name="image" accept="image/*">
 
-      <label>Content</label>
-      <textarea class="answer-input" maxlength="350" required></textarea>
-    </div>
-  </div>
+    <hr>
+    <h3>🟢 Bullet Points</h3>
+    <div id="bulletPointsContainer" class="dynamic-section"></div>
+    <button type="button" id="addBulletPoint">+ Add Bullet Point</button>
 
-  <button type="button" class="btn-add-section" onclick="addFaqField()">+ Add Section</button>
+    <hr>
+    <h3>📄 Sections</h3>
+    <div id="sectionsContainer" class="dynamic-section"></div>
+    <button type="button" id="addSection">+ Add Section</button>
 
-  <h3>Accordion Items</h3>
-  <div id="newsAccordionContainer">
-    <div class="accordion-item">
-      <input type="text" maxlength="100" placeholder="Title" required>
-      <textarea maxlength="350" placeholder="Content" required></textarea>
-    </div>
-  </div>
-  <button type="button" class="add-item" onclick="addAccordion('newsAccordionContainer')">Add Accordion Item</button>
+    <hr>
+    <h3>🪗 Accordions</h3>
+    <div id="accordionContainer" class="dynamic-section"></div>
+    <button type="button" id="addAccordion">+ Add Accordion</button>
 
-  <label>Heading</label>
-  <input type="text" maxlength="100" required>
+    <hr>
+    <h3>✍️ Authors</h3>
+    <div id="authorsContainer" class="dynamic-section"></div>
+    <button type="button" id="addAuthor">+ Add Author</button>
 
-  <label>Description</label>
-  <textarea maxlength="350" required></textarea>
-
-  <h3>Author Details</h3>
-  <div id="writerSection">
-    <div class="author-item">
-      <label>Author Name</label>
-      <input type="text" placeholder="Enter author name" maxlength="100" required>
-
-      <label>Designation</label>
-      <input type="text" placeholder="Enter designation" maxlength="100" required>
-
-      <label>LinkedIn URL</label>
-      <input type="url" placeholder="Enter LinkedIn profile link">
-    </div>
-  </div>
-  <button type="button" class="add-item" onclick="addAuthor()">+ Add Author</button>
-
-  <button type="submit">Submit Article</button>
-</form>
-
+    <hr>
+    <button type="submit">✅ Submit News Article</button>
+  </form>
+<script src="assets/js/newsArticle.js"></script>
 <!-- Perspective Form -->
-<form id="PerspectiveForm" class="content-form" onsubmit="return validateForm(event)">
+<form id="PerspectiveForm" enctype="multipart/form-data" class="content-form">
   <h2>Perspective</h2>
 
   <label>Article Title</label>
-  <input type="text" maxlength="100" required>
+  <input type="text" name="articleTitle" maxlength="100" required>
 
   <label>Subtitle</label>
-  <input type="text" maxlength="100" required>
+  <input type="text" name="subtitle" maxlength="100" required>
 
   <label>Topic</label>
-  <input type="text" class="auto-topic" maxlength="100" required>
+  <input type="text" name="topic" maxlength="100" required>
 
   <label>Industry</label>
-  <input type="text" class="auto-industry" maxlength="100" required>
+  <input type="text" name="industry" maxlength="100" required>
 
   <label>Date</label>
-  <input type="date" required>
+  <input type="date" name="date" required>
 
   <h3>In Brief</h3>
   <div id="briefContainer">
     <div class="item">
       <label>Section Content</label>
-      <textarea maxlength="350" required></textarea>
-      <input type="text" maxlength="100" placeholder="Key insight" required>
+      <textarea name="briefSectionContent" maxlength="350" required></textarea>
+      <input type="text" name="briefKeyInsight" maxlength="100" placeholder="Key insight" required>
     </div>
   </div>
-  <button type="button" class="add-btn" onclick="addBrief()">+ Add Point</button>
+  <button type="button" onclick="addBrief()">+ Add Point</button>
 
   <h3>Article Image</h3>
-  <label>Upload Image</label>
-  <input type="file" accept="image/*" required>
+  <input type="file" name="image" accept="image/*" required>
 
   <h3>Additional Sections</h3>
   <div id="questionContainer">
     <div class="question-item">
       <label>Title</label>
-      <input type="text" class="question-input" maxlength="100" required>
-
+      <input type="text" name="sectionTitle" maxlength="100" required>
       <label>Content</label>
-      <textarea class="answer-input" maxlength="350" required></textarea>
+      <textarea name="sectionContent" maxlength="350" required></textarea>
     </div>
   </div>
-  <button type="button" class="btn-add-section" onclick="addQuestionBlock()">+ Add Section</button>
+  <button type="button" onclick="addQuestionBlock()">+ Add Section</button>
 
   <h3>Accordion Sections</h3>
   <div id="perspectiveAccordionContainer">
     <div class="item">
       <label>Accordion Title</label>
-      <input type="text" maxlength="100" required>
-
+      <input type="text" name="accordionTitle" maxlength="100" required>
       <label>Accordion Description</label>
-      <textarea maxlength="350" required></textarea>
+      <textarea name="accordionDescription" maxlength="350" required></textarea>
     </div>
   </div>
-  <button type="button" class="add-btn" onclick="addAccordion('perspectiveAccordionContainer')">+ Add Accordion</button>
+  <button type="button" onclick="addAccordion()">+ Add Accordion</button>
+
   <button type="submit">Submit Perspective</button>
 </form>
+<script src = "assets/js/perspective.js"></script>
 
 <!-- Podcast Form -->
-<form id="PodcastForm" class="content-form" onsubmit="return validateForm(event)">
-  <h2>Podcast</h2>
+<form id="PodcastForm" enctype="multipart/form-data" class="content-form">
+  <h2>🎙️ Podcast</h2>
 
   <label>Title</label>
-  <input type="text" maxlength="100" required>
+  <input type="text" name="title" maxlength="100" required>
 
   <label>Subtitle</label>
-  <textarea maxlength="350" required></textarea>
+  <textarea name="subtitle" maxlength="350" required></textarea>
 
   <label>Topic</label>
-  <input type="text" class="auto-topic" maxlength="100" required>
+  <input type="text" name="topic" class="auto-topic" maxlength="100" required>
 
   <label>Industry</label>
-  <input type="text" class="auto-industry" maxlength="100" required>
+  <input type="text" name="industry" class="auto-industry" maxlength="100" required>
 
   <label>Date</label>
-  <input type="date" required>
+  <input type="date" name="date" required>
 
-  <div id="episodesContainer"></div>
+  <h3>Episodes</h3>
+  <div id="episodesContainer">
+    <div class="episode-item">
+      <label>Episode Title</label>
+      <input type="text" name="episodeTitle" maxlength="100" placeholder="Episode title" required>
+
+      <label>Description</label>
+      <textarea name="episodeDescription" maxlength="350" placeholder="Episode description" required></textarea>
+
+      <label>Audio File</label>
+      <input type="file" name="audioFile" accept="audio/*" required>
+    </div>
+  </div>
+
   <button type="button" class="add-btn" onclick="addEpisode()">+ Add Episode</button>
   <button type="submit">Submit Podcast</button>
 </form>
+<script src ="assets/js/podcast.js"></script>
 
 <!-- Research Repo Form -->
-<form id="ResearchForm" class="content-form" onsubmit="return validateForm(event)">
-  <h2>Research Repository</h2>
+<form id="ResearchForm" enctype="multipart/form-data">
+    <h2>Research Repository</h2>
 
-  <label>Title</label>
-  <input type="text" maxlength="100" required>
+    <label>Title</label>
+    <input type="text" name="title" maxlength="100" required>
 
-  <label>Topic</label>
-  <input type="text" class="auto-topic" maxlength="100" required>
+    <label>Topic</label>
+    <input type="text" name="topic" maxlength="100" required>
 
-  <label>Industry</label>
-  <input type="text" class="auto-industry" maxlength="100" required>
+    <label>Industry</label>
+    <input type="text" name="industry" maxlength="100" required>
 
-  <label>Date</label>
-  <input type="date" required>
+    <label>Date</label>
+    <input type="date" name="date" required>
 
-  <h3>Author Details</h3>
-  <div id="authorGroup">
-    <div class="author-item">
-      <label>Author Name</label>
-      <input type="text" placeholder="Enter author name" maxlength="100" required>
+    <h3>Author Details</h3>
+    <div id="authorGroup">
+      <div class="author-item">
+        <label>Author Name</label>
+        <input type="text" name="authorNames" maxlength="100" required>
 
-      <label>Designation</label>
-      <input type="text" placeholder="Enter designation" maxlength="100" required>
+        <label>Designation</label>
+        <input type="text" name="authorDesignations" maxlength="100" required>
 
-      <label>LinkedIn URL</label>
-      <input type="url" placeholder="Enter LinkedIn profile link">
+        <label>LinkedIn URL</label>
+        <input type="url" name="authorLinkedIns" placeholder="https://linkedin.com/in/...">
+      </div>
     </div>
-  </div>
-  <button type="button" class="add-item" onclick="addAuthor()">+ Add Author</button>
+    <button type="button" class="add-btn" onclick="addAuthor()">+ Add Author</button>
 
-  <label>Abstract</label>
-  <textarea maxlength="350" required></textarea>
+    <label>Abstract</label>
+    <textarea name="abstractText" maxlength="350" required></textarea>
 
-  <label>Upload Document</label>
-  <input type="file" required>
+    <label>Upload Document</label>
+    <input type="file" name="document" accept=".pdf,.doc,.docx" required>
 
-  <h3>Key Findings</h3>
-  <div id="findingsContainer">
-    <div class="finding-item">
-      <input type="text" maxlength="100" placeholder="Key Finding" required>
+    <h3>Key Findings</h3>
+    <div id="findingsContainer">
+      <div class="finding-item">
+        <input type="text" name="keyFindings" maxlength="100" placeholder="Key Finding" required>
+      </div>
     </div>
-  </div>
-  <button type="button" class="add-btn" onclick="addFinding()">+ Add Finding</button>
+    <button type="button" class="add-btn" onclick="addFinding()">+ Add Finding</button>
 
-  <h3>Additional Sections</h3>
-  <div id="contentBlockWrapper">
-    <div class="content-block">
-      <label>Title</label>
-      <input type="text" class="block-title" maxlength="100" required>
-
-      <label>Content</label>
-      <textarea class="block-details" maxlength="350" required></textarea>
+    <h3>Additional Sections</h3>
+    <div id="contentBlockWrapper">
+      <div class="content-block">
+        <label>Title</label>
+        <input type="text" name="sectionTitles" maxlength="100" required>
+        <label>Content</label>
+        <textarea name="sectionContents" maxlength="350" required></textarea>
+      </div>
     </div>
-  </div>
-  <button type="button" class="btn-add-section" onclick="addContentBlock()">+ Add Section</button>
+    <button type="button" class="add-btn" onclick="addContentBlock()">+ Add Section</button>
 
-  <h3>Accordion Sections</h3>
-  <div id="researchAccordionContainer">
-    <div class="accordion-item">
-      <input type="text" maxlength="100" placeholder="Title" required>
-      <textarea maxlength="350" placeholder="Content" required></textarea>
+    <h3>Accordion Sections</h3>
+    <div id="researchAccordionContainer">
+      <div class="accordion-item">
+        <input type="text" name="accordionTitles" maxlength="100" placeholder="Accordion Title" required>
+        <textarea name="accordionContents" maxlength="350" placeholder="Accordion Content" required></textarea>
+      </div>
     </div>
-  </div>
-  <button type="button" class="add-btn" onclick="addAccordion('researchAccordionContainer')">+ Add Accordion</button>
+    <button type="button" class="add-btn" onclick="addAccordion()">+ Add Accordion</button>
 
-  <button type="submit">Submit Research</button>
-</form>
+    <button type="submit" class="submit-btn">Submit Research</button>
+  </form>
+
+
     <!-- ALL FORMS END HERE -->
 
-  </div>
-</div>
+  <!-- //<script src="assets/js/research.js"></script> -->
 
-
+<script src="assets/js/research.js" defer></script>
 
 <script src="assets/js/form.js"></script>
 
+
+<!-- Blog -->
+
+
+
+<!-- <script>
+window.addEventListener("load", () => {
+  document.getElementById("BlogForm").addEventListener("submit", submitBlog);
+});
+
+async function submitBlog(event) {
+  event.preventDefault();
+  console.log("submitBlog called ✅"); 
+
+  const blogData = {
+    title: document.getElementById("title-blog").value,
+    topic: document.getElementById("topic").value,
+    industry: document.getElementById("industry").value,
+    date: document.getElementById("date").value,
+    introParagraph: document.getElementById("intro").value,
+    paragraphAfterImage: document.getElementById("afterImage").value,
+    sections: [],
+    accordions: [],
+    authors: []
+  };
+
+  const formData = new FormData();
+  formData.append("blog", new Blob([JSON.stringify(blogData)], { type: "application/json" }));
+
+  const imageFile = document.querySelector("#imageFile").files[0];
+  if (imageFile) {
+    formData.append("imageFile", imageFile);
+  }
+
+  try {
+    const response = await fetch("http://localhost:8080/api/blogs/add", {
+      method: "POST",
+      body: formData
+    });
+
+    const text = await response.text();
+    console.log("Server response:", text);
+
+    if (response.ok) {
+      alert("✅ Blog saved successfully!");
+    } else {
+      alert("❌ Error saving blog!\n" + text);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    alert("⚠️ Request failed! Check console for details.");
+  }
+}
+</script> -->
+
+<script>
+document.getElementById("BlogForm").addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const form = e.target;
+
+  // Collect blog data
+  const blog = {
+    title: form.querySelector('[name="title"]').value.trim(),
+    topic: form.querySelector('[name="topic"]').value.trim(),
+    industry: form.querySelector('[name="industry"]').value.trim(),
+    date: form.querySelector('[name="date"]').value,
+    introParagraph: form.querySelector('[name="introParagraph"]').value.trim(),
+    paragraphAfterImage: form.querySelector('[name="paragraphAfterImage"]').value.trim()
+  };
+
+  // Prepare form data for backend (JSON + file)
+  const fd = new FormData();
+  fd.append("blog", new Blob([JSON.stringify(blog)], { type: "application/json" }));
+
+  const imageFile = form.querySelector('input[name="imageFile"]').files[0];
+  if (imageFile) fd.append("imageFile", imageFile);
+
+  try {
+    const res = await fetch("http://localhost:8080/api/blogs/add", {
+      method: "POST",
+      body: fd
+    });
+
+    if (!res.ok) {
+      const msg = await res.text();
+      throw new Error(msg || "Failed to save blog");
+    }
+
+    const savedBlog = await res.json(); // backend should return saved blog as JSON
+    alert("✅ Blog saved successfully!");
+    form.reset();
+
+    // ✅ Dynamically add new blog row in table
+    const tableBody = document.querySelector("#insightsTable tbody");
+    if (tableBody) {
+      const newRow = document.createElement("tr");
+      newRow.innerHTML = `
+        <td>${savedBlog.title || "-"}</td>
+        <td>${savedBlog.topic || "-"}</td>
+        <td>${savedBlog.industry || "-"}</td>
+        <td>Blog</td>
+        <td>${savedBlog.date || "-"}</td>
+        <td><span class="status">Published</span></td>
+        <td>
+          <button onclick="viewBlog(${savedBlog.id})">👁 Edit</button>
+          <button onclick="deleteBlog(${savedBlog.id})">🗑 Delete</button>
+        </td>`;
+      tableBody.prepend(newRow);
+    }
+
+  } catch (err) {
+    console.error("❌ Submit error:", err);
+    alert("Failed to save blog: " + err.message);
+  }
+});
+
+
+// ✅ DELETE BLOG
+async function deleteBlog(id) {
+  if (!confirm("🗑️ Are you sure you want to delete this blog?")) return;
+
+  try {
+    const res = await fetch(`http://localhost:8080/api/blogs/add/${id}`, {
+      method: "DELETE"
+    });
+
+    if (res.status === 204 || res.ok) {
+      alert("🗑️ Blog deleted successfully!");
+      const btn = document.querySelector(`#insightsTable button[onclick="deleteBlog(${id})"]`);
+      if (btn) btn.closest("tr").remove();
+    } else {
+      const msg = await res.text();
+      alert("❌ Failed to delete blog: " + msg);
+    }
+  } catch (err) {
+    alert("Server error: " + err.message);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+
+<!-- <script>
+let sectionCount = 1;
+let accordionCount = 1;
+
+function addSection() {
+  const container = document.getElementById('csContentContainer');
+  const div = document.createElement('div');
+  div.classList.add('item');
+  div.innerHTML = `
+    <label>Section Title</label><input type="text" name="sections[${sectionCount}].title">
+    <label>Section Content</label><textarea name="sections[${sectionCount}].content"></textarea>
+  `;
+  container.appendChild(div);
+  sectionCount++;
+}
+
+function addAccordion() {
+  const container = document.getElementById('csAccordionContainer');
+  const div = document.createElement('div');
+  div.classList.add('item');
+  div.innerHTML = `
+    <label>Accordion Title</label><input type="text" name="accordions[${accordionCount}].title">
+    <label>Accordion Description</label><textarea name="accordions[${accordionCount}].description"></textarea>
+  `;
+  container.appendChild(div);
+  accordionCount++;
+}
+
+document.getElementById('CaseStudyForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+
+  // Convert fields to JSON manually (simplified for demo)
+  const caseStudy = {
+    mainHeading: formData.get("mainHeading"),
+    subtitle: formData.get("subtitle"),
+    topic: formData.get("topic"),
+    industry: formData.get("industry"),
+    date: formData.get("date"),
+    videoUrl: formData.get("videoUrl"),
+    sections: [],
+    accordions: []
+  };
+
+  for (let i = 0; i < sectionCount; i++) {
+    const title = formData.get(`sections[${i}].title`);
+    const content = formData.get(`sections[${i}].content`);
+    if (title) caseStudy.sections.push({ title, content });
+  }
+
+  for (let i = 0; i < accordionCount; i++) {
+    const title = formData.get(`accordions[${i}].title`);
+    const description = formData.get(`accordions[${i}].description`);
+    if (title) caseStudy.accordions.push({ title, description });
+  }
+
+  const jsonBlob = new Blob([JSON.stringify(caseStudy)], { type: "application/json" });
+  const uploadData = new FormData();
+  uploadData.append("caseStudy", jsonBlob);
+  uploadData.append("image", formData.get("image"));
+  uploadData.append("thumbnail", formData.get("thumbnail"));
+
+  const res = await fetch("http://localhost:8080/api/casestudy", {
+    method: "POST",
+    body: uploadData
+  });
+
+  if (res.ok) alert("Case Study saved successfully!");
+  else alert("Error saving Case Study.");
+});
+</script> -->
+
+<script>
+document.getElementById('LiveInterviewForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const form = e.target;
+  const liveInterview = {
+    interviewTitle: form.querySelector('[name="interviewTitle"]').value.trim(),
+    topic: form.querySelector('[name="topic"]').value.trim(),
+    industry: form.querySelector('[name="industry"]').value.trim(),
+    date: form.querySelector('[name="date"]').value,
+    quote: form.querySelector('[name="quote"]').value.trim(),
+    intervieweeName: form.querySelector('[name="intervieweeName"]').value.trim(),
+    intervieweeDesignation: form.querySelector('[name="intervieweeDesignation"]').value.trim(),
+    qaSections: [],
+    questions: []
+  };
+
+  // collect QA sections
+  document.querySelectorAll('.qa-section').forEach(node => {
+    const title = node.querySelector('.qa-title')?.value?.trim() || "";
+    const content = node.querySelector('.qa-content')?.value?.trim() || "";
+    if (title || content) {
+      liveInterview.qaSections.push({ title, content });
+    }
+  });
+
+  // collect questions
+  document.querySelectorAll('.question-block').forEach(node => {
+    const questionText = node.querySelector('.q-question')?.value?.trim() || "";
+    const answerText = node.querySelector('.q-answer')?.value?.trim() || "";
+    if (questionText || answerText) {
+      liveInterview.questions.push({ questionText, answerText });
+    }
+  });
+
+  // Debug JSON before sending
+  console.log("Final JSON to send:", JSON.stringify(liveInterview, null, 2));
+
+  // build multipart/form-data
+  const fd = new FormData();
+  fd.append("liveInterview", new Blob([JSON.stringify(liveInterview)], { type: "application/json" }));
+
+  const imageFile = form.querySelector('input[name="image"]').files[0];
+  if (imageFile) fd.append("image", imageFile);
+
+  try {
+    const res = await fetch("http://localhost:8080/api/live-interviews", {
+      method: "POST",
+      body: fd
+    });
+
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text);
+    }
+
+    const saved = await res.json();
+    alert("Interview saved! ID = " + saved.id);
+    form.reset();
+
+    // ✅ ADD THIS CODE HERE — updates your dashboard table
+    const tableBody = document.querySelector("#insightsTable tbody");
+    if (!tableBody) return; // prevent errors if table isn’t on this page
+
+    // Remove "No insights available" message if exists
+    const emptyRow = tableBody.querySelector("td[colspan='7']");
+    if (emptyRow) emptyRow.parentElement.remove();
+
+    // Create and insert a new row
+    const newRow = document.createElement("tr");
+    newRow.innerHTML = `
+      <td>${saved.interviewTitle || "-"}</td>
+      <td>${saved.topic || "-"}</td>
+      <td>${saved.industry || "-"}</td>
+      <td>Live Interview</td>
+      <td>${saved.date || "-"}</td>
+      <td><span class="status">Published</span></td>
+      <td>
+        <button onclick="viewInterview(${saved.id})">👁 View</button>
+        <button onclick="deleteInterview(${saved.id})">🗑 Delete</button>
+      </td>
+    `;
+    tableBody.prepend(newRow);
+
+  } catch (err) {
+    console.error("Submit error:", err);
+    alert("Network or server error: " + err.message);
+  }
+});
+
+async function deleteInterview(id) {
+  if (!confirm("Are you sure you want to delete this interview?")) return;
+  try {
+    const res = await fetch(`http://localhost:8080/api/live-interviews/${id}`, { method: "DELETE" });
+    if (res.ok) {
+      alert("Interview deleted successfully!");
+      document.querySelector(`#insightsTable button[onclick="deleteInterview(${id})"]`).closest("tr").remove();
+    } else {
+      alert("Failed to delete interview.");
+    }
+  } catch (err) {
+    console.error("Delete error:", err);
+    alert("Server error: " + err.message);
+  }
+}
+
+
+</script>
+
+<!-- <script>
+document.getElementById('NewsArticleForm').addEventListener('submit', async function (e) {
+  e.preventDefault();
+
+  const form = e.target;
+
+  // ✅ Build the NewsArticle JSON object
+  const article = {
+    articleTitle: form.querySelector('[name="articleTitle"]').value.trim(),
+    subtitle: form.querySelector('[name="subtitle"]').value.trim(),
+    topic: form.querySelector('[name="topic"]').value.trim(),
+    industry: form.querySelector('[name="industry"]').value.trim(),
+    date: form.querySelector('[name="date"]').value,
+    mainContent: form.querySelector('[name="mainContent"]').value.trim(),
+    heading: form.querySelector('[name="heading"]').value.trim(),
+    description: form.querySelector('[name="description"]').value.trim(),
+    bulletPoints: [],
+    sections: [],
+    accordions: [],
+    authors: []
+  };
+
+  // ✅ Collect bullet points
+  form.querySelectorAll('input[name="bulletPoints"]').forEach(input => {
+    const val = input.value.trim();
+    if (val) article.bulletPoints.push({ point: val });
+  });
+
+  // ✅ Collect additional sections
+  form.querySelectorAll('#faqFieldGroup .faq-field').forEach(node => {
+    const heading = node.querySelector('input[name="sectionTitle"]')?.value.trim();
+    const content = node.querySelector('textarea[name="sectionContent"]')?.value.trim();
+    if (heading || content) article.sections.push({ heading, content });
+  });
+
+  // ✅ Collect accordion items
+  form.querySelectorAll('#newsAccordionContainer .accordion-item').forEach(node => {
+    const title = node.querySelector('input[name="accordionTitle"]')?.value.trim();
+    const content = node.querySelector('textarea[name="accordionContent"]')?.value.trim();
+    if (title || content) article.accordions.push({ title, content });
+  });
+
+  // ✅ Collect author details
+  form.querySelectorAll('#writerSection .author-item').forEach(node => {
+    const name = node.querySelector('input[name="authorName"]')?.value.trim();
+    const designation = node.querySelector('input[name="designation"]')?.value.trim();
+    const linkedInUrl = node.querySelector('input[name="linkedinUrl"]')?.value.trim();
+    if (name || designation || linkedInUrl) {
+      article.authors.push({ name, designation, linkedInUrl });
+    }
+  });
+
+  // ✅ Debug log (optional)
+  console.log("📦 NewsArticle JSON:", JSON.stringify(article, null, 2));
+
+  // ✅ Build FormData for multipart POST
+  const fd = new FormData();
+  fd.append("article", new Blob([JSON.stringify(article)], { type: "application/json" }));
+
+  const imageFile = form.querySelector('#image').files[0];
+  if (imageFile) fd.append("image", imageFile);
+
+  try {
+    const res = await fetch("http://localhost:8080/api/news", {
+      method: "POST",
+      body: fd
+    });
+
+    if (!res.ok) {
+      const errText = await res.text();
+      throw new Error(errText);
+    }
+
+    const message = await res.text();
+    alert("✅ " + message);
+    form.reset();
+
+    // ✅ Update your dashboard table dynamically
+    const tableBody = document.querySelector("#insightsTable tbody");
+    if (!tableBody) return;
+
+    // Remove "no data" message if exists
+    const emptyRow = tableBody.querySelector("td[colspan]");
+    if (emptyRow) emptyRow.parentElement.remove();
+
+    const newRow = document.createElement("tr");
+    newRow.innerHTML = `
+      <td>${article.articleTitle || "-"}</td>
+      <td>${article.topic || "-"}</td>
+      <td>${article.industry || "-"}</td>
+      <td>News Article</td>
+      <td>${article.date || "-"}</td>
+      <td><span class="status">Published</span></td>
+      <td>
+        <button onclick="viewNewsArticle('${article.articleTitle}')">👁 View</button>
+        <button onclick="deleteNewsArticle('${article.articleTitle}')">🗑 Delete</button>
+      </td>
+    `;
+    tableBody.prepend(newRow);
+
+  } catch (err) {
+    console.error("Submit error:", err);
+    alert("❌ Submission failed: " + err.message);
+  }
+});
+
+// ✅ Delete handler
+async function deleteNewsArticle(id) {
+  if (!confirm("Are you sure you want to delete this article?")) return;
+  try {
+    const res = await fetch(`http://localhost:8080/api/news/${id}`, { method: "DELETE" });
+    if (res.ok) {
+      alert("🗑 Article deleted successfully!");
+      document.querySelector(`#insightsTable button[onclick="deleteNewsArticle(${id})"]`).closest("tr").remove();
+    } else {
+      alert("❌ Failed to delete article.");
+    }
+  } catch (err) {
+    console.error("Delete error:", err);
+    alert("❌ Server error: " + err.message);
+  }
+}
+
+// ✅ View handler (basic example)
+function viewNewsArticle(title) {
+  alert("📰 Viewing article: " + title);
+}
+</script> -->
+
+
+
+<!-- 
+perspective -->
+
+<!-- <script>
+    function addBrief() {
+      const container = document.getElementById("briefContainer");
+      const item = document.createElement("div");
+      item.classList.add("item");
+      item.innerHTML = `
+        <label>Section Content</label>
+        <textarea maxlength="350" required></textarea>
+        <input type="text" maxlength="100" placeholder="Key insight" required>
+      `;
+      container.appendChild(item);
+    }
+
+    function addQuestionBlock() {
+      const container = document.getElementById("questionContainer");
+      const item = document.createElement("div");
+      item.classList.add("question-item");
+      item.innerHTML = `
+        <label>Title</label>
+        <input type="text" maxlength="100" required>
+        <label>Content</label>
+        <textarea maxlength="350" required></textarea>
+      `;
+      container.appendChild(item);
+    }
+
+    function addAccordion(containerId) {
+      const container = document.getElementById(containerId);
+      const item = document.createElement("div");
+      item.classList.add("item");
+      item.innerHTML = `
+        <label>Accordion Title</label>
+        <input type="text" maxlength="100" required>
+        <label>Accordion Description</label>
+        <textarea maxlength="350" required></textarea>
+      `;
+      container.appendChild(item);
+    }
+
+    async function validateForm(event) {
+      event.preventDefault();
+
+      const form = document.getElementById("PerspectiveForm");
+      const data = {
+        articleTitle: form[0].value,
+        subtitle: form[1].value,
+        topic: form[2].value,
+        industry: form[3].value,
+        date: form[4].value,
+        briefs: [],
+        sections: [],
+        accordions: []
+      };
+
+      // Gather "In Brief"
+      document.querySelectorAll("#briefContainer .item").forEach(item => {
+        data.briefs.push({
+          sectionContent: item.querySelector("textarea").value,
+          keyInsight: item.querySelector("input").value
+        });
+      });
+
+      // Additional Sections
+      document.querySelectorAll("#questionContainer .question-item").forEach(item => {
+        data.sections.push({
+          title: item.querySelector("input").value,
+          content: item.querySelector("textarea").value
+        });
+      });
+
+      // Accordions
+      document.querySelectorAll("#perspectiveAccordionContainer .item").forEach(item => {
+        data.accordions.push({
+          accordionTitle: item.querySelectorAll("input")[0].value,
+          accordionDescription: item.querySelector("textarea").value
+        });
+      });
+
+      const imageFile = form.querySelector("input[type=file]").files[0];
+      const formData = new FormData();
+      formData.append("data", new Blob([JSON.stringify(data)], { type: "application/json" }));
+      formData.append("image", imageFile);
+
+      const response = await fetch("http://localhost:8080/api/perspectives", {
+        method: "POST",
+        body: formData
+      });
+
+     if (response.ok) {
+  alert("Perspective submitted successfully!");
+  form.reset();
+  loadPerspectives(); // reload dashboard table
+}
+ else {
+        alert("Failed to submit.");
+      }
+    }
+  </script> -->
+
+
+<!-- 
+  <script>
+    function addEpisode() {
+      const div = document.createElement('div');
+      div.classList.add('episode');
+      div.innerHTML = `
+        <label>Episode Title</label>
+        <input type="text" class="episode-title" required>
+        <label>Description</label>
+        <textarea class="episode-desc" required></textarea>
+        <label>Audio URL</label>
+        <input type="text" class="episode-audio" required>
+      `;
+      document.getElementById('episodesContainer').appendChild(div);
+    }
+
+    async function submitPodcast(event) {
+      event.preventDefault();
+
+      const episodes = Array.from(document.querySelectorAll('.episode')).map(ep => ({
+        episodeTitle: ep.querySelector('.episode-title').value,
+        description: ep.querySelector('.episode-desc').value,
+        audioUrl: ep.querySelector('.episode-audio').value
+      }));
+
+      const podcast = {
+        title: document.getElementById('title').value,
+        subtitle: document.getElementById('subtitle').value,
+        topic: document.getElementById('topic').value,
+        industry: document.getElementById('industry').value,
+        date: document.getElementById('date').value,
+        episodes: episodes
+      };
+
+      const res = await fetch("http://localhost:8080/F", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(podcast)
+      });
+
+      if (res.ok) {
+        alert("Podcast saved successfully!");
+        document.getElementById('PodcastForm').reset();
+        document.getElementById('episodesContainer').innerHTML = "";
+      } else {
+        alert("Error saving podcast.");
+      }
+    }
+  </script> -->
+  <!-- <script>
+document.addEventListener("DOMContentLoaded", function() {
+
+  // ✅ Add new Author
+  window.addAuthor = function() {
+    const authorGroup = document.getElementById("authorGroup");
+
+    const div = document.createElement("div");
+    div.classList.add("author-item");
+    div.innerHTML = `
+      <hr>
+      <label>Author Name</label>
+      <input type="text" name="authors[].name" placeholder="Enter author name" maxlength="100" required>
+
+      <label>Designation</label>
+      <input type="text" name="authors[].designation" placeholder="Enter designation" maxlength="100" required>
+
+      <label>LinkedIn URL</label>
+      <input type="url" name="authors[].linkedin" placeholder="Enter LinkedIn profile link">
+
+      <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove Author</button>
+    `;
+    authorGroup.appendChild(div);
+  };
+
+  // ✅ Add new Key Finding
+  window.addFinding = function() {
+    const container = document.getElementById("findingsContainer");
+
+    const div = document.createElement("div");
+    div.classList.add("finding-item");
+    div.innerHTML = `
+      <input type="text" name="keyFindings[]" maxlength="100" placeholder="Key Finding" required>
+      <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove</button>
+    `;
+    container.appendChild(div);
+  };
+
+  // ✅ Add new Content Block
+  window.addContentBlock = function() {
+    const wrapper = document.getElementById("contentBlockWrapper");
+
+    const div = document.createElement("div");
+    div.classList.add("content-block");
+    div.innerHTML = `
+      <hr>
+      <label>Title</label>
+      <input type="text" name="sections[].title" class="block-title" maxlength="100" required>
+
+      <label>Content</label>
+      <textarea name="sections[].content" class="block-details" maxlength="350" required></textarea>
+
+      <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove Section</button>
+    `;
+    wrapper.appendChild(div);
+  };
+
+  // ✅ Add Accordion Section
+  window.addAccordion = function(containerId) {
+    const container = document.getElementById(containerId);
+
+    const div = document.createElement("div");
+    div.classList.add("accordion-item");
+    div.innerHTML = `
+      <hr>
+      <input type="text" name="accordions[].title" maxlength="100" placeholder="Title" required>
+      <textarea name="accordions[].content" maxlength="350" placeholder="Content" required></textarea>
+      <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove</button>
+    `;
+    container.appendChild(div);
+  };
+
+  // ✅ Form Validation
+  window.validateForm = function(event) {
+    event.preventDefault();
+
+    const form = document.getElementById("ResearchForm");
+    if (!form.checkValidity()) {
+      alert("Please fill all required fields correctly.");
+      return false;
+    }
+
+    // Collect form data
+    const formData = new FormData(form);
+
+    // Debugging – Show all keys & values
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
+
+    // Example AJAX request (to backend)
+    fetch("http://localhost:8080/api/research", {
+      method: "POST",
+      body: formData
+    })
+    .then(response => {
+      if (!response.ok) throw new Error("Network error");
+      return response.json();
+    })
+    .then(data => {
+      alert("✅ Research submitted successfully!");
+      form.reset();
+    })
+    .catch(error => {
+      console.error(error);
+      alert("❌ Failed to submit research.");
+    });
+
+    return false;
+  };
+});
+</script> -->
+<script src = "assets/js/insights-black.js"></script>
 </body>
 </html>

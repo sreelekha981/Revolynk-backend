@@ -50,7 +50,7 @@
       <div class="top-controls">
         <div class="left-icon">
           <button class="icon-btn"><i class="fa-solid fa-table-cells-large"></i></button>
-          <div class="tooltip">Title, Department, Type, Posted On, Status</div>
+          <div class="tooltip">Title, Experience, Type, Posted On, Status</div>
         </div>
         <div class="right-controls">
           <button onclick="exportExcel()">Excel</button>
@@ -61,11 +61,11 @@
 
       <div class="filters">
         <select id="filterDept">
-          <option value="">--Department--</option>
-          <option>Marketing</option>
-          <option>Development</option>
-          <option>Design</option>
-          <option>HR</option>
+          <option value="">--Experince--</option>
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
         </select>
         <select id="filterType">
           <option value="">--Job Type--</option>
@@ -90,7 +90,7 @@
         <thead>
           <tr>
             <th>Title</th>
-            <th>Department</th>
+            <th>Experince</th>
             <th>Type</th>
             <th>Posted On</th>
             <th>Status</th>
@@ -233,5 +233,6 @@ function printTable() {
 
 renderTable();
 </script>
+<script src = "assets/js/jobPosting.js"></script>
 </body>
 </html>

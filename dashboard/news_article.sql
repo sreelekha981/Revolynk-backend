@@ -1,0 +1,20 @@
+CREATE TABLE news_article (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    article_title VARCHAR(255),
+    subtitle TEXT,
+    topic VARCHAR(255),
+    industry VARCHAR(255),
+    date DATE,
+    main_content TEXT,
+    bullet_points JSON,
+    section_title JSON,
+    section_content JSON,
+    accordion_title JSON,
+    accordion_content JSON,
+    heading VARCHAR(255),
+    description TEXT,
+    author_name JSON,
+    designation JSON,
+    linkedin_url JSON,
+    image_path VARCHAR(500)
+);

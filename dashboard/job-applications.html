@@ -50,8 +50,8 @@
     <div class="card">
       <div class="title-row">
         <h2>Job Applications</h2>
-        <button class="add-btn" onclick="openModal()">+ Add Application</button>
-      </div>
+        <!-- <button class="add-btn" onclick="openModal()">+ Add Application</button> -->
+      </div> 
 
       <div class="top-controls">
         <div class="left-icon">
@@ -121,7 +121,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal" id="jobModal">
+<!-- <div class="modal" id="jobModal">
   <div class="modal-content">
     <button class="close-btn" onclick="closeModal()">&times;</button>
     <h3 id="modalTitle">Add Application</h3>
@@ -144,7 +144,23 @@
     <input type="date" id="applicantDate" />
     <button style="background:#28a745;color:#fff;" onclick="saveApplication()">Save</button>
   </div>
+</div> -->
+<!-- Modal -->
+<div class="modal fade" id="applicationModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle">Application Preview</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
 </div>
+
 
 <script>
 // User dropdown
@@ -308,6 +324,113 @@ function printTable() {
 
 renderTable();
 </script>
+<script>
+async function loadApplications() {
+    const res = await fetch("http://localhost:8080/api/applications");
+    const data = await res.json();
 
+    const tableBody = document.querySelector("#applicationsTable tbody");
+    tableBody.innerHTML = "";
+
+    if (data.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center;">No applications available.</td></tr>`;
+        return;
+    }
+
+    data.forEach(app => {
+        const row = `
+            <tr>
+                <td>${app.firstName} ${app.lastName}</td>
+                <td>${app.email}</td>
+                <td>${app.phone}</td>
+                <td>${app.currentLocation}</td>
+                <td>Received</td>
+                <td>${new Date(app.appliedOn).toLocaleString()}</td>
+                <td>
+                    <button onclick="viewApplication(${app.id})">Preview</button>
+                    <button onclick="deleteApplication(${app.id})">Delete</button>
+                </td>
+            </tr>
+        `;
+        tableBody.innerHTML += row;
+    });
+}
+
+async function deleteApplication(id) {
+    if (!confirm("Delete this application?")) return;
+    await fetch(`http://localhost:8080/api/applications/${id}`, { method: "DELETE" });
+    loadApplications();
+}
+
+function viewApplication(id) {
+    alert("Preview coming soon (id=" + id + ")");
+}
+
+document.addEventListener("DOMContentLoaded", loadApplications);
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+ <script> async function viewApplication(id) {
+  try {
+    const res = await fetch(`http://localhost:8080/api/applications/${id}`);
+    const app = await res.json();
+
+    // Generate readable modal content
+    const body = `
+      <p><strong>Full Name:</strong> ${app.firstName} ${app.middleName || ""} ${app.lastName}</p>
+      <p><strong>Email:</strong> ${app.email}</p>
+      <p><strong>Phone:</strong> ${app.phone}</p>
+      <p><strong>Gender:</strong> ${app.gender}</p>
+      <p><strong>Current Location:</strong> ${app.currentLocation}</p>
+      <p><strong>Experience:</strong> ${app.experienceYears || 0} Years, ${app.experienceMonths || 0} Months</p>
+      <p><strong>Current Salary:</strong> ${app.currentSalary || "—"}</p>
+      <p><strong>Expected Salary:</strong> ${app.expectedSalary || "—"}</p>
+      <p><strong>Skills:</strong> ${app.skills || "—"}</p>
+      <p><strong>Willing to Relocate:</strong> ${app.relocate || "—"}</p>
+
+      ${
+        app.experiences && app.experiences.length
+          ? `
+          <hr>
+          <h5>Experience Details</h5>
+          ${app.experiences.map(exp => `
+            <div>
+              <p><strong>Company:</strong> ${exp.company}</p>
+              <p><strong>Role:</strong> ${exp.role}</p>
+              <p><strong>Duration:</strong> ${exp.duration}</p>
+              <p><strong>Responsibilities:</strong> ${exp.responsibilities || "—"}</p>
+            </div>
+            <hr>
+          `).join("")}`
+          : ""
+      }
+
+      ${
+        app.educations && app.educations.length
+          ? `
+          <h5>Education Details</h5>
+          ${app.educations.map(edu => `
+            <div>
+              <p><strong>Degree:</strong> ${edu.degree}</p>
+              <p><strong>Institution:</strong> ${edu.institution}</p>
+              <p><strong>Year of Passing:</strong> ${edu.yearOfPassing}</p>
+              <p><strong>Percentage / CGPA:</strong> ${edu.cgpa || "—"}</p>
+            </div>
+            <hr>
+          `).join("")}`
+          : ""
+      }
+    `;
+
+    document.getElementById("modalBody").innerHTML = body;
+
+    // Show modal
+    const modal = new bootstrap.Modal(document.getElementById("applicationModal"));
+    modal.show();
+  } catch (err) {
+    console.error("Error loading application details:", err);
+    alert("Unable to load application details.");
+  }
+}
+</script>
 </body>
 </html>

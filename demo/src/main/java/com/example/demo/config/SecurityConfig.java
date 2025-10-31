@@ -19,7 +19,7 @@ public class SecurityConfig {
                     "/api/auth/verify-otp",
                     "/api/auth/change-password",
                     "/api/auth/logout",
-                    "/api/public/**"
+                    "/api/**"
                 ).permitAll() // Public endpoints
                 .anyRequest().authenticated() // Everything else requires login
             )
