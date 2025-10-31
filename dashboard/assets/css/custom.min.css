@@ -1023,3 +1023,76 @@ textarea {
         align-self: flex-end;
       }
     }
+
+/* case study */
+
+
+    /* Hero Section */
+    .case-hero-section {
+      background-color: #f8f9fa;
+      padding: 60px 0;
+      margin-top: 80px;
+    }
+
+    .case-hero-image {
+      border-radius: 10px;
+      width: 100%;
+      height: auto;
+    }
+
+    /* Section Wrapper */
+    .case-section {
+      padding: 60px 0;
+    }
+
+    .case-section-title {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: #000;
+    }
+
+    /* Challenge Section */
+    .case-challenge-img {
+      border-radius: 10px;
+      width: 100%;
+      height: auto;
+    }
+
+    /* Key Points (bulleted lists) */
+    .case-points li {
+      margin-bottom: 0.5rem;
+    }
+
+    .case-points li::marker {
+      color: #0078d7;
+    }
+
+    /* Approach Steps */
+    .case-step-box {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    /* Footer */
+    .case-footer {
+      background-color: #f8f9fa;
+      text-align: center;
+      padding: 20px;
+      margin-top: 50px;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 767px) {
+      .case-hero-image,
+      .case-challenge-img,
+      .case-approach-img {
+        margin-top: 20px;
+      }
+    }
+
+.job-application-form-head{
+  line-height: 20px !important;
+
+}

@@ -28,6 +28,7 @@ function addFaqField() {
   container.appendChild(field);
 }
 
+
 // ✅ Add Question Block
 function addQuestionBlock() {
   const container = document.getElementById("questionContainer");
@@ -131,7 +132,7 @@ const filterData = {
   ],
   content: [
     "Blog",
-    "Case Study",
+    
     "Live Interview",
     "News Article",
     "Perspective",
@@ -290,10 +291,26 @@ function addEpisode() {
     <label>Upload Episode Image</label>
     <input type="file" accept="image/*" required>
 
-    <label>Audio URL</label>
-    <input type="url" placeholder="Enter audio file URL (e.g. https://example.com/episode.mp3)">
+    <label>Upload Audio File</label>
+<input type="file" accept="audio/*" required onchange="previewAudio(event)">
+
+<!-- Optional: Audio preview -->
+<audio id="audioPreview" controls style="display:none; margin-top:10px; width:100%;"></audio>
+
   `;
   container.appendChild(div);
+}
+function previewAudio(event) {
+  const file = event.target.files[0];
+  const audioPreview = document.getElementById("audioPreview");
+
+  if (file) {
+    const fileURL = URL.createObjectURL(file);
+    audioPreview.src = fileURL;
+    audioPreview.style.display = "block";
+  } else {
+    audioPreview.style.display = "none";
+  }
 }
 
 function addAuthor() {

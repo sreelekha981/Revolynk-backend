@@ -133,6 +133,11 @@
 
   <label>Industry</label>
   <input type="text" name="industry" maxlength="100" required>
+ <label>Topic</label>
+  <input type="text" class="auto-topic" maxlength="100" required>
+
+  <label>Industry</label>
+  <input type="text" class="auto-industry" maxlength="100" required>
 
   <label>Date</label>
   <input type="date" name="date" required>
@@ -143,6 +148,7 @@
       <label>Title</label>
       <input type="text" class="qa-title" name="qaTitle" maxlength="100" required>
 
+      <input type="text" class="qa-question" maxlength="100" required>
       <label>Content</label>
       <textarea class="qa-content" name="qaContent" maxlength="350" required></textarea>
     </div>
@@ -167,6 +173,7 @@
       <label>Question 1</label>
       <input type="text" class="q-question" name="question1" maxlength="100" required>
 
+      <input type="text" maxlength="100" required>
       <label>Answer 1</label>
       <textarea class="q-answer" name="answer1" maxlength="350" required></textarea>
     </div>
@@ -324,6 +331,8 @@
   </div>
 
   <button type="button" class="add-btn" onclick="addEpisode()">+ Add Episode</button>
+  <div id="episodesContainer"></div>
+  <button type="button" class="add-btn" onclick="addEpisode()">+ Add Podcast</button>
   <button type="submit">Submit Podcast</button>
 </form>
 <script src ="assets/js/podcast.js"></script>
