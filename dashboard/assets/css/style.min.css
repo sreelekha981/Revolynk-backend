@@ -83,3 +83,70 @@ button[type="submit"]:hover,.btn-add-section:hover,.add-btn:hover,.add-question:
   text-align: center;
 }
 
+section.case-form-section.main-container {
+ 
+}
+
+.case-form-container {
+  /* background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 1000px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08); */
+   background:#fff;padding:2rem;margin:2rem auto;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);max-width:1000px;width: 100%;
+
+}
+
+.case-label {
+  font-weight: 600;
+  color: #000;
+}
+
+.case-input,
+.case-textarea {
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  transition: all 0.3s ease;
+}
+
+.case-input:focus,
+.case-textarea:focus {
+  border-color: #9504e8;
+  box-shadow: 0 0 0 3px rgba(149, 4, 232, 0.15);
+  outline: none;
+}
+
+.case-add-btn {
+  border-radius: 25px;
+  padding: 0.5rem 1.2rem;
+  transition: all 0.3s ease;
+   background: #000;
+  color: #fff;
+}
+
+
+.case-add-btn:hover {
+  background: #9504e8;
+  color: #fff;
+}
+
+.case-submit-btn {
+  border-radius: 30px;
+  transition: all 0.3s ease;
+  padding: 8px;
+  margin-top: 5px;
+   background: #000;
+  color: #fff;
+}
+
+.case-submit-btn:hover {
+  background: #9504e8;
+}
+
+/* Dynamic input row */
+.case-dynamic-group input {
+  margin-bottom: 0.5rem;
+}
+h2.text-center.mb-4.fw-bold {
+    text-align: center;
+}
