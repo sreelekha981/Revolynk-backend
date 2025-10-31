@@ -1,0 +1,21 @@
+CREATE TABLE job_applications (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    job_id BIGINT,
+    first_name VARCHAR(100),
+    middle_name VARCHAR(100),
+    last_name VARCHAR(100),
+    email VARCHAR(200),
+    phone VARCHAR(50),
+    gender VARCHAR(20),
+    experience_years INT,
+    experience_months INT,
+    current_salary VARCHAR(100),
+    expected_salary VARCHAR(100),
+    current_location VARCHAR(200),
+    notice_period VARCHAR(50),
+    skills TEXT,
+    willing_to_relocate VARCHAR(10),
+    resume_file VARCHAR(255),
+    applied_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(50) DEFAULT 'Pending'
+);

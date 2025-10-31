@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Content Management Dashboard</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/style.min.css">
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="logo"><img src="assets/images/logos/logo.png" alt="Logo"></div>
+  <div class="user" onclick="toggleDropdown()">
+    <i class="fa-solid fa-user-circle"></i><span>Venu</span>
+    <div class="user-dropdown" id="userDropdown"><a href="login.html">Logout</a></div>
+  </div>
+</div>
+
+<!-- Page Layout -->
+<div class="page-layout">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2><a href="dashboard.html">Dashboard</a></h2>
+    <ul>
+      <li><a href="dashboard.html"><i class="fa-solid fa-chart-line"></i> Insights</a></li>
+      <li class="dropdown">
+        <a href="#" onclick="toggleRecruitDropdown(event)">
+          <i class="fa-solid fa-briefcase"></i> Recruit
+          <i class="fa-solid fa-angle-right arrow"></i>
+        </a>
+        <div class="dropdown-content" style="display:none; margin-left:20px;">
+          <a href="job-postings.html"><i class="fa-solid fa-file-lines"></i> Job Postings</a>
+          <a href="job-applications.html"><i class="fa-solid fa-envelope-open-text"></i> Job Applications</a>
+        </div>
+      </li>
+      <li><a href="case-studies.html"><i class="fa-solid fa-folder-open"></i> Case Studies</a></li>
+      <li><a href="leads.html"><i class="fa-solid fa-user-group"></i> Leads</a></li>
+      <li><a href="user.html"><i class="fa-solid fa-users"></i> Users</a></li>
+    </ul>
+  </div>
+
+  <!-- Main Container -->
+  <!-- ================= FORM ================= -->
+ 
+  <!-- ================= FORM SECTION ================= -->
+<section class="case-form-section main-container">
+  <h2 class="text-center mb-4 fw-bold">Case Study </h2>
+
+ <form id="caseForm"  enctype="multipart/form-data" class="case-form-container">
+  <div class="row g-3">
+
+    <!-- Title, Industry, Category -->
+    <div class="col-md-6">
+      <label class="case-label form-label">Case Study Title</label>
+      <input type="text" name="title" class="form-control case-input" id="titleInput" placeholder="Enter title" required>
+    </div>
+
+    <div class="col-md-3">
+      <label class="case-label form-label">Industry</label>
+      <input type="text" name="industry" class="form-control case-input" id="industryInput" placeholder="e.g., Retail, Healthcare" required>
+    </div>
+
+    <div class="col-md-3">
+      <label class="case-label form-label">Category</label>
+      <input type="text" name="category" class="form-control case-input" id="categoryInput" placeholder="e.g., AI & Data" required>
+    </div>
+
+    <!-- Hero Image -->
+    <div class="col-md-6">
+      <label class="case-label form-label">Hero Image</label>
+      <input type="file" name="heroImage" class="form-control case-input" id="heroImageInput" accept="image/*">
+    </div>
+
+    <!-- Client Overview -->
+    <div class="col-12">
+      <label class="case-label form-label">Client Overview</label>
+      <textarea name="overview" class="form-control case-textarea" id="overviewInput" rows="3" placeholder="Describe the client..."></textarea>
+    </div>
+
+    <!-- The Challenge -->
+    <div class="col-12">
+      <label class="case-label form-label">The Challenge</label>
+      <textarea name="challenge" class="form-control case-textarea" id="challengeInput" rows="3" placeholder="Describe the main challenges..."></textarea>
+    </div>
+
+    <!-- Challenge Points -->
+    <div class="col-12">
+      <label class="case-label form-label">Challenge Points</label>
+      <div id="challengePointsContainer" class="case-dynamic-group"></div>
+      <button type="button" class="btn btn-outline-dark btn-sm mt-2 case-add-btn" onclick="addChallengePoint()">+ Add Point</button>
+    </div>
+
+    <div class="col-md-6">
+      <label class="case-label form-label">Challenge Image</label>
+      <input type="file" name="challengeImage" class="form-control case-input" id="challengeImageInput" accept="image/*">
+    </div>
+
+    <!-- Key Constraints -->
+    <div class="col-12">
+      <label class="case-label form-label">Key Constraints</label>
+      <div id="constraintsContainer" class="case-dynamic-group"></div>
+      <button type="button" class="btn btn-outline-dark btn-sm mt-2 case-add-btn" onclick="addConstraint()">+ Add Constraint</button>
+    </div>
+
+    <!-- Our Approach -->
+    <div class="col-12">
+      <label class="case-label form-label">Our Approach Steps</label>
+      <div id="approachStepsContainer" class="case-dynamic-group"></div>
+      <button type="button" class="btn btn-outline-dark btn-sm mt-2 case-add-btn" onclick="addApproachStep()">+ Add Approach Step</button>
+    </div>
+
+    <div class="col-md-6">
+      <label class="case-label form-label">Approach Image</label>
+      <input type="file" name="approachImage" class="form-control case-input" id="approachImageInput" accept="image/*">
+    </div>
+
+    <!-- The Outcome -->
+    <div class="col-12">
+      <label class="case-label form-label">The Outcome</label>
+      <textarea name="outcome" class="form-control case-textarea" id="outcomeInput" rows="3" placeholder="Describe the final results..."></textarea>
+    </div>
+
+    <!-- What Made This Work -->
+    <div class="col-12">
+      <label class="case-label form-label">What Made This Work</label>
+      <textarea name="madeWork" class="form-control case-textarea" id="madeWorkInput" rows="3" placeholder="What made this case study successful..."></textarea>
+    </div>
+
+    <div class="col-md-6">
+      <label class="case-label form-label">What Made This Work Image</label>
+      <input type="file" name="madeWorkImage" class="form-control case-input" id="madeWorkImageInput" accept="image/*">
+    </div>
+
+    <!-- Submit Button -->
+    <div class="col-12 text-center mt-4">
+      <button type="button" class="btn btn-dark px-5 py-2 case-submit-btn" onclick="generateCaseStudy()">Generate Case Study</button>
+    </div>
+  </div>
+</form>
+
+</section>
+
+
+</div>
+<script src = "assets/js/caseStudy.js"></script>
+
+<script>
+function addChallengePoint() {
+  const container = document.getElementById('challengePointsContainer');
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'form-control mb-2';
+  input.placeholder = 'Enter challenge point';
+  container.appendChild(input);
+}
+
+function addConstraint() {
+  const container = document.getElementById('constraintsContainer');
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'form-control mb-2';
+  input.placeholder = 'Enter key constraint';
+  container.appendChild(input);
+}
+
+function addApproachStep() {
+  const container = document.getElementById('approachStepsContainer');
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'form-control mb-2';
+  input.placeholder = 'Enter approach step';
+  container.appendChild(input);
+}
+</script>
+
+
+
+</body>
+</html>

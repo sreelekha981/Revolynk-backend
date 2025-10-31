@@ -198,5 +198,221 @@ document.getElementById('jobForm').addEventListener('submit', function(e){
   window.location.href='job-postings.html';
 });
 </script>
+
+
+
+<!-- <script>
+  // ==========================
+// Job Form JS
+// ==========================
+
+// ✅ Base API endpoint
+const API_URL = "http://localhost:8080/api/jobs";
+
+// ==========================
+// 1️⃣ Dynamic input handlers
+// ==========================
+
+function addProfilePoint() {
+  const container = document.getElementById("profileContainer");
+  const input = document.createElement("input");
+  input.type = "text";
+  input.className = "profileInput mb-2";
+  input.placeholder = "New Point";
+  container.appendChild(input);
+}
+
+function addSkill() {
+  const container = document.getElementById("skillsContainer");
+  const input = document.createElement("input");
+  input.type = "text";
+  input.className = "skillInput mb-2";
+  input.placeholder = "New Skill";
+  container.appendChild(input);
+}
+
+// ==========================
+// 2️⃣ Load job data for edit
+// ==========================
+async function loadJobForEdit() {
+  const jobId = new URLSearchParams(window.location.search).get("id");
+  if (!jobId) return; // Not editing — skip
+
+  try {
+    const res = await fetch(`${API_URL}/${jobId}`);
+    if (!res.ok) throw new Error("Job not found");
+    const job = await res.json();
+
+    // Fill form fields
+    document.getElementById("jobTitle").value = job.title || "";
+    document.getElementById("jobExperience").value = job.experience || "";
+    document.getElementById("jobLocation").value = job.location || "";
+    document.getElementById("jobType").value = job.type || "";
+    document.getElementById("jobDate").value = job.date || "";
+    document.getElementById("jobDescription").value = job.description || "";
+
+    // Profile points
+    const profileContainer = document.getElementById("profileContainer");
+    profileContainer.innerHTML = "";
+    (job.profilePoints || []).forEach(p => {
+      const input = document.createElement("input");
+      input.type = "text";
+      input.className = "profileInput mb-2";
+      input.value = p;
+      profileContainer.appendChild(input);
+    });
+    if (!job.profilePoints || job.profilePoints.length === 0) addProfilePoint();
+
+    // Skills
+    const skillsContainer = document.getElementById("skillsContainer");
+    skillsContainer.innerHTML = "";
+    (job.skills || []).forEach(s => {
+      const input = document.createElement("input");
+      input.type = "text";
+      input.className = "skillInput mb-2";
+      input.value = s;
+      skillsContainer.appendChild(input);
+    });
+    if (!job.skills || job.skills.length === 0) addSkill();
+  } catch (err) {
+    console.error("Error loading job:", err);
+    alert("Error loading job details. Please try again.");
+  }
+}
+
+// ==========================
+// 3️⃣ Handle form submission
+// ==========================
+document.getElementById("jobForm").addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const job = {
+    title: document.getElementById("jobTitle").value.trim(),
+    experience: document.getElementById("jobExperience").value.trim(),
+    location: document.getElementById("jobLocation").value.trim(),
+    type: document.getElementById("jobType").value.trim(),
+    date: document.getElementById("jobDate").value,
+    description: document.getElementById("jobDescription").value.trim(),
+    profilePoints: Array.from(document.querySelectorAll(".profileInput"))
+      .map(i => i.value.trim())
+      .filter(Boolean),
+    skills: Array.from(document.querySelectorAll(".skillInput"))
+      .map(i => i.value.trim())
+      .filter(Boolean),
+    status: "Active"
+  };
+
+  const jobId = new URLSearchParams(window.location.search).get("id");
+  const method = jobId ? "PUT" : "POST";
+  const url = jobId ? `${API_URL}/${jobId}` : API_URL;
+
+  try {
+    const res = await fetch(url, {
+      method,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(job)
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to save job");
+    }
+
+    alert(jobId ? "Job updated successfully!" : "Job created successfully!");
+    window.location.href = "job-postings.html";
+  } catch (error) {
+    console.error(error);
+    alert("Error saving job. Please try again.");
+  }
+});
+
+// ==========================
+// 4️⃣ Header dropdown toggle
+// ==========================
+function toggleDropdown() {
+  const dd = document.getElementById("userDropdown");
+  dd.style.display = dd.style.display === "flex" ? "none" : "flex";
+}
+
+// ==========================
+// 5️⃣ Sidebar dropdown toggle
+// ==========================
+function toggleRecruitDropdown(event) {
+  event.preventDefault();
+  const content = event.currentTarget.nextElementSibling;
+  const arrow = event.currentTarget.querySelector(".arrow");
+  content.style.display = content.style.display === "flex" ? "none" : "flex";
+  arrow.classList.toggle("rotate");
+}
+
+// ==========================
+// 6️⃣ Init on load
+// ==========================
+window.addEventListener("DOMContentLoaded", loadJobForEdit);
+
+</script> -->
+
+<script>
+    function addProfilePoint() {
+      const container = document.getElementById("profileContainer");
+      const input = document.createElement("input");
+      input.type = "text";
+      input.className = "profileInput mb-2";
+      input.placeholder = "New Point";
+      container.appendChild(input);
+    }
+
+    function addSkill() {
+      const container = document.getElementById("skillsContainer");
+      const input = document.createElement("input");
+      input.type = "text";
+      input.className = "skillInput mb-2";
+      input.placeholder = "New Skill";
+      container.appendChild(input);
+    }
+
+    const API_URL = "http://localhost:8080/api/jobs";
+
+    document.getElementById('jobForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const job = {
+        title: document.getElementById('jobTitle').value,
+        experience: document.getElementById('jobExperience').value,
+        location: document.getElementById('jobLocation').value,
+        type: document.getElementById('jobType').value,
+        date: document.getElementById('jobDate').value,
+        description: document.getElementById('jobDescription').value,
+        profilePoints: Array.from(document.querySelectorAll('.profileInput')).map(i => i.value),
+        skills: Array.from(document.querySelectorAll('.skillInput')).map(i => i.value),
+        status: "Active"
+      };
+
+      const jobId = new URLSearchParams(window.location.search).get("id");
+      const method = jobId ? "PUT" : "POST";
+      const url = jobId ? `${API_URL}/${jobId}` : API_URL;
+
+      try {
+        const res = await fetch(url, {
+          method,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(job)
+        });
+
+        if (!res.ok) {
+          const text = await res.text();
+          console.error("❌ Backend error:", text);
+          alert("Error saving job. See console for details.");
+          return;
+        }
+
+        alert("✅ Job saved successfully!");
+        window.location.href = "job-postings.html";
+      } catch (err) {
+        console.error("⚠️ Network/JS error:", err);
+        alert("Network error. Check console.");
+      }
+    });
+  </script>
 </body>
+
 </html>
