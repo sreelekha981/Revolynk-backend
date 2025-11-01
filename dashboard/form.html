@@ -57,7 +57,56 @@
 
     <!-- Blog Form -->
    <form id="BlogForm" enctype="multipart/form-data" class="content-form">
-  <h2>Add Blog</h2>
+
+    <h2>Add Blog</h2>
+      
+  <label>Title</label>
+  <input type="text" id="title-blog" name="title" required>
+
+  <label>Topic</label>
+  <input type="text" id="topic" name="topic" class="auto-topic" required>
+
+  <label>Industry</label>
+  <input type="text" id="industry" name="industry" class="auto-industry" required>
+
+  <label>Date</label>
+  <input type="date" id="date" name="date" required>
+
+  <label>Intro Paragraph</label>
+  <textarea id="intro" name="introParagraph"></textarea>
+     <h3>📝 Additional Blog Sections</h3>
+
+<div id="qaSectionWrapper">
+  <div class="question-item">
+    <label>Section Title</label>
+    <input type="text" name="extraSectionTitle[]" placeholder="Enter section title" required>
+
+    <label>Section Content</label>
+    <textarea name="extraSectionContent[]" placeholder="Enter section content" required></textarea>
+
+    <button type="button" class="remove-btn" onclick="this.closest('.question-item').remove()">Remove</button>
+  </div>
+</div>
+
+<button type="button" class="add-btn" id="addQaSectionBtn">+ Add Section</button>
+
+  <label>Upload Image</label>
+  <input type="file" id="imageFile" name="imageFile">
+
+  <label>Paragraph after Image</label>
+  <textarea id="afterImage" name="paragraphAfterImage"></textarea>
+<h3>Blog Accordions</h3>
+
+<div id="blogAccordionContainer" class="dynamic-section"></div>
+
+<button type="button" class="add-btn" id="addBlogAccordion">+ Add Blog Accordion</button>
+            <label>Authors</label><div id="authorsContainer"><div class="author-item"><input type="text" placeholder="Author Name"><label>Designation</label><textarea></textarea><label>LinkedIn URL</label>
+    <input type="url" placeholder=""></div></div>
+     
+      <button type="submit">Submit Blog</button>
+
+
+  <!-- <h2>Add Blog</h2>
 
   <label>Title</label>
   <input type="text" id="title-blog" name="title" required>
@@ -76,7 +125,7 @@
 
   <h3>Sections</h3>
   <div id="blogContentContainer"></div>
-  <button type="button" onclick="addSection()">+ Add Section</button>
+  <button type="button" class="add-btn" onclick="addSection()">+ Add Section</button>
 
   <label>Upload Image</label>
   <input type="file" id="imageFile" name="imageFile">
@@ -86,15 +135,83 @@
 
   <h3>Accordions</h3>
   <div id="blogAccordionContainer"></div>
-  <button type="button" onclick="addAccordion()">+ Add Accordion</button>
+  <button type="button" class="add-btn" onclick="addAccordion()">+ Add Accordion</button>
 
   <h3>Authors</h3>
   <div id="authorsContainer"></div>
-  <button type="button" onclick="addAuthor()">+ Add Author</button>
+  <button type="submit" onclick="addAuthor()">+ Add Author</button>
 
   <br><br>
-  <button type="submit">Submit Blog</button>
+  <button type="submit">Submit Blog</button> -->
 </form>
+
+
+<!-- <script>
+  // === Add Blog Section ===
+  function addSection() {
+    const container = document.getElementById('blogContentContainer');
+
+    const section = document.createElement('div');
+    section.classList.add('blog-section');
+    section.innerHTML = `
+      <label>Section Title</label>
+      <input type="text" name="sectionTitle[]" required>
+
+      <label>Section Content</label>
+      <textarea name="sectionContent[]" required></textarea>
+
+      <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove Section</button>
+      <hr>
+    `;
+    container.appendChild(section);
+  }
+
+  // === Add Accordion ===
+  function addAccordion() {
+    const container = document.getElementById('blogAccordionContainer');
+
+    const accordion = document.createElement('div');
+    accordion.classList.add('blog-accordion');
+    accordion.innerHTML = `
+      <label>Accordion Question</label>
+      <input type="text" name="accordionQuestion[]" required>
+
+      <label>Accordion Answer</label>
+      <textarea name="accordionAnswer[]" required></textarea>
+
+      <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove Accordion</button>
+      <hr>
+    `;
+    container.appendChild(accordion);
+  }
+
+  // === Add Author ===
+  function addAuthor() {
+    const container = document.getElementById('authorsContainer');
+
+    const author = document.createElement('div');
+    author.classList.add('author-section');
+    author.innerHTML = `
+      <label>Author Name</label>
+      <input type="text" name="authorName[]" required>
+
+      <label>Designation</label>
+      <input type="text" name="authorDesignation[]" required>
+
+      <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove Author</button>
+      <hr>
+    `;
+    container.appendChild(author);
+  }
+
+  // === Optional: Handle Form Submission ===
+  document.getElementById('BlogForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    alert('Blog form submitted successfully!');
+    // You can add AJAX here to send form data to backend
+  });
+</script> -->
+
 
 
     <!-- Case Study Form -->
@@ -128,6 +245,7 @@
   <label>Interview Title</label>
   <input type="text" name="interviewTitle" maxlength="100" required>
 
+  
  <label>Topic</label>
   <input type="text" class="auto-topic" name = "topic" maxlength="100" required>
 
@@ -137,18 +255,20 @@
   <label>Date</label>
   <input type="date" name="date" required>
 
-  <h3>Additional Sections</h3>
-  <div id="qaSectionsContainer">
-    <div class="qa-section">
-      <label>Title</label>
-      <input type="text" class="qa-title" name="qaTitle" maxlength="100" required>
+<h3>Extra Information Sections</h3>
+<div id="extraInfoContainer">
+  <div class="extra-info-item">
+    <label>Section Title</label>
+    <input type="text" name="extraInfoTitle[]" maxlength="100" placeholder="Enter section title" required>
 
-      <input type="text" class="qa-question" maxlength="100" required>
-      <label>Content</label>
-      <textarea class="qa-content" name="qaContent" maxlength="350" required></textarea>
-    </div>
+    <label>Section Content</label>
+    <textarea name="extraInfoContent[]" maxlength="350" placeholder="Enter section content" required></textarea>
+
+    <button type="button" class="remove-btn" onclick="this.closest('.extra-info-item').remove()">Remove</button>
   </div>
-  <button type="button" class="btn-add-section" onclick="addQASection()">+ Add Section</button>
+</div>
+
+<button type="button" class="add-btn" onclick="addExtraInfoBlock()">+ Add Section</button>
 
   <label>Upload Image</label>
   <input type="file" name="image" accept="image/*" required>
@@ -168,7 +288,7 @@
       <label>Question 1</label>
       <input type="text" class="q-question" name="question1" maxlength="100" required>
 
-      <input type="text" maxlength="100" required>
+     
       <label>Answer 1</label>
       <textarea class="q-answer" name="answer1" maxlength="350" required></textarea>
     </div>
@@ -179,6 +299,7 @@
 </form>
 
 
+
 <!-- News Article Form -->
 <form id="NewsArticleForm" enctype="multipart/form-data" class="content-form">
     <h2>📰 Add News Article</h2>
@@ -186,14 +307,14 @@
     <label>Article Title</label>
     <input type="text" name="articleTitle" required>
 
-    <label>Subtitle</label>
+    <label>Subtitle</label> 
     <input type="text" name="subtitle">
 
     <label>Topic</label>
-    <input type="text" name="topic">
+    <input type="text" class="auto-topic" name="topic" maxlength="100" required>
 
     <label>Industry</label>
-    <input type="text" name="industry">
+    <input type="text" class="auto-industry" name="industry" maxlength="100" required>
 
     <label>Date</label>
     <input type="date" name="date" required>
@@ -211,25 +332,24 @@
     <input type="file" name="image" accept="image/*">
 
     <hr>
-    <h3>🟢 Bullet Points</h3>
+    <h3>Bullet Points</h3>
     <div id="bulletPointsContainer" class="dynamic-section"></div>
-    <button type="button" id="addBulletPoint">+ Add Bullet Point</button>
+    <button type="button" class="add-btn" id="addBulletPoint">+ Add Bullet Point</button>
 
     <hr>
-    <h3>📄 Sections</h3>
+    <h3>Sections</h3>
     <div id="sectionsContainer" class="dynamic-section"></div>
-    <button type="button" id="addSection">+ Add Section</button>
+    <button type="button" class="add-btn" id="addSection">+ Add Section</button>
 
     <hr>
-    <h3>🪗 Accordions</h3>
+    <h3>Accordions</h3>
     <div id="accordionContainer" class="dynamic-section"></div>
-    <button type="button" id="addAccordion">+ Add Accordion</button>
+    <button type="button" class="add-btn" id="addAccordion">+ Add Accordion</button>
 
     <hr>
-    <h3>✍️ Authors</h3>
-    <div id="authorsContainer" class="dynamic-section"></div>
-    <button type="button" id="addAuthor">+ Add Author</button>
-
+   <label>Authors</label><div id="authorsContainer"><div class="author-item"><input type="text" placeholder="Author Name"><label>Designation</label><textarea></textarea><label>LinkedIn URL</label>
+    <input type="url" placeholder=""></div></div>
+     
     <hr>
     <button type="submit">✅ Submit News Article</button>
   </form>
@@ -245,23 +365,24 @@
   <input type="text" name="subtitle" maxlength="100" required>
 
   <label>Topic</label>
-  <input type="text" name="topic" maxlength="100" required>
+  <input type="text" name="topic" class="auto-topic" maxlength="100" required>
 
   <label>Industry</label>
-  <input type="text" name="industry" maxlength="100" required>
+  <input type="text" name="industry" class="auto-industry" maxlength="100" required>
 
   <label>Date</label>
   <input type="date" name="date" required>
 
   <h3>In Brief</h3>
   <div id="briefContainer">
+    <label>Section Content</label>
     <div class="item">
-      <label>Section Content</label>
+      
       <textarea name="briefSectionContent" maxlength="350" required></textarea>
       <input type="text" name="briefKeyInsight" maxlength="100" placeholder="Key insight" required>
     </div>
   </div>
-  <button type="button" onclick="addBrief()">+ Add Point</button>
+  <button type="button" class="add-btn" onclick="addBrief()">+ Add Point</button>
 
   <h3>Article Image</h3>
   <input type="file" name="image" accept="image/*" required>
@@ -275,18 +396,23 @@
       <textarea name="sectionContent" maxlength="350" required></textarea>
     </div>
   </div>
-  <button type="button" onclick="addQuestionBlock()">+ Add Section</button>
+  <button type="button" class="add-btn" onclick="addQuestionBlock()">+ Add Section</button>
 
-  <h3>Accordion Sections</h3>
-  <div id="perspectiveAccordionContainer">
-    <div class="item">
-      <label>Accordion Title</label>
-      <input type="text" name="accordionTitle" maxlength="100" required>
-      <label>Accordion Description</label>
-      <textarea name="accordionDescription" maxlength="350" required></textarea>
-    </div>
+ <h3>🪗 Insight Accordions</h3>
+
+<div id="insightAccordionContainer">
+  <div class="item">
+    <label>Accordion Title</label>
+    <input type="text" name="insightAccordionTitle[]" maxlength="100" required>
+
+    <label>Accordion Description</label>
+    <textarea name="insightAccordionDescription[]" maxlength="350" required></textarea>
+
+    <button type="button" class="remove-btn" onclick="this.closest('.item').remove()">Remove</button>
   </div>
-  <button type="button" onclick="addAccordion()">+ Add Accordion</button>
+</div>
+
+<button type="button" class="add-btn" id="addInsightAccordionBtn">+ Add Accordion</button>
 
   <button type="submit">Submit Perspective</button>
 </form>
@@ -325,25 +451,23 @@
     </div>
   </div>
 
-  <button type="button" class="add-btn" onclick="addEpisode()">+ Add Episode</button>
-  <div id="episodesContainer"></div>
   <button type="button" class="add-btn" onclick="addEpisode()">+ Add Podcast</button>
   <button type="submit">Submit Podcast</button>
 </form>
 <script src ="assets/js/podcast.js"></script>
 
 <!-- Research Repo Form -->
-<form id="ResearchForm" enctype="multipart/form-data">
+<form id="ResearchForm" enctype="multipart/form-data" class="content-form">
     <h2>Research Repository</h2>
 
     <label>Title</label>
     <input type="text" name="title" maxlength="100" required>
 
     <label>Topic</label>
-    <input type="text" name="topic" maxlength="100" required>
+    <input type="text" name="topic" class="auto-topic" maxlength="100" required>
 
     <label>Industry</label>
-    <input type="text" name="industry" maxlength="100" required>
+    <input type="text" name="industry" class="auto-industry" maxlength="100" required>
 
     <label>Date</label>
     <input type="date" name="date" required>
@@ -399,6 +523,30 @@
 
     <button type="submit" class="submit-btn">Submit Research</button>
   </form>
+  <script>
+  function addInsightAccordion() {
+    const container = document.getElementById('insightAccordionContainer');
+
+    const div = document.createElement('div');
+    div.classList.add('item');
+    div.innerHTML = `
+      <label>Accordion Title</label>
+      <input type="text" name="insightAccordionTitle[]" maxlength="100" required>
+
+      <label>Accordion Description</label>
+      <textarea name="insightAccordionDescription[]" maxlength="350" required></textarea>
+
+      <button type="button" class="remove-btn" onclick="this.closest('.item').remove()">Remove</button>
+    `;
+
+    container.appendChild(div);
+    div.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // bind button click
+  document.getElementById('addInsightAccordionBtn').addEventListener('click', addInsightAccordion);
+</script>
+
 
 
     <!-- ALL FORMS END HERE -->
@@ -549,10 +697,77 @@ async function deleteBlog(id) {
   }
 }
 </script>
+<script>
+  // make sure this function exists and is available when the button is clicked
+  function addBlogAccordionSection() {
+    const container = document.getElementById("blogAccordionContainer");
+
+    const div = document.createElement("div");
+    div.classList.add("accordion-item");
+
+    div.innerHTML = `
+      <label>Accordion Title</label>
+      <input type="text" name="blogAccordionTitle[]" placeholder="Enter accordion title" required>
+
+      <label>Accordion Description</label>
+      <textarea name="blogAccordionDescription[]" placeholder="Enter accordion content" required></textarea>
+
+      <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove</button>
+    `;
+
+    container.appendChild(div);
+    div.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  // attach the click event to button
+  document.getElementById("addBlogAccordion").addEventListener("click", addBlogAccordionSection);
+  function addQaSection() {
+    const container = document.getElementById('qaSectionWrapper');
+    if (!container) {
+      console.error('qaSectionWrapper not found');
+      return;
+    }
+
+    const div = document.createElement('div');
+    div.className = 'question-item';
+    div.innerHTML = `
+      <label>Section Title</label>
+      <input type="text" name="extraSectionTitle[]" placeholder="Enter section title" required>
+
+      <label>Section Content</label>
+      <textarea name="extraSectionContent[]" placeholder="Enter section content" required></textarea>
+
+      <button type="button" class="remove-btn" onclick="this.closest('.question-item').remove()">Remove</button>
+    `;
+    container.appendChild(div);
+    div.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // bind the button safely
+  document.getElementById('addQaSectionBtn').addEventListener('click', addQaSection);
+ 
+   function addExtraInfoBlock() {
+    const container = document.getElementById('extraInfoContainer');
+    const div = document.createElement('div');
+    div.classList.add('extra-info-item');
+    div.innerHTML = `
+      <label>Section Title</label>
+      <input type="text" name="extraInfoTitle[]" maxlength="100" placeholder="Enter section title" required>
+
+      <label>Section Content</label>
+      <textarea name="extraInfoContent[]" maxlength="350" placeholder="Enter section content" required></textarea>
+
+      <button type="button" class="remove-btn" onclick="this.closest('.extra-info-item').remove()">Remove</button>
+    `;
+    container.appendChild(div);
+    div.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  
+  
+</script>
 
 
-
-
+<script src="assets/js/form.js"></script>
 
 
 

@@ -66,6 +66,7 @@ table th { background:#f1f1f1; font-weight:600; }
 .expanded-row button{padding:10px 5px;cursor:pointer;border-radius:6px;border:1px solid #000;background:#fff;transition:.2s;}
 .expanded-row button.active,.expanded-row button:hover{background:#000;color:#fff;}
 /* Forms */
+
 .content-form{display:none;background:#fff;padding:2rem;margin:2rem auto;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);max-width:1000px;width: 100%;}
 label{font-weight:600;display:block;margin-top:1rem;margin-bottom:.4rem;}
 input[type="text"],input[type="date"],input[type="url"],textarea,input[type="file"]{width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;resize:vertical;font-size:15px;}
