@@ -349,8 +349,7 @@ function addBrief() {
   const div = document.createElement("div");
   div.className = "item";
   div.innerHTML = `
-    <label>Section Content</label>
-    <textarea maxlength="350" required></textarea>
+   
     <input type="text" placeholder="Key insight" maxlength="100" required>
   `;
   container.appendChild(div);

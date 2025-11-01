@@ -18,7 +18,56 @@
 
 </head>
 <body>
+<style>
+    /* Popup Form */
+    .popup-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
 
+    .popup {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      width: 400px;
+    }
+
+    .popup h3 { margin-top: 0; }
+    .popup label { display: block; margin-top: 10px; }
+    .popup input, .popup select, .popup textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .popup-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .popup-buttons button {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .save-btn { background: #007bff; color: white; }
+    .cancel-btn { background: #aaa; color: white; }
+
+  </style>
+</head>
+<body>
+</style>
 <div class="header">
   <div class="logo"><img src="assets/images/logos/logo.png" alt="Logo"></div>
   <div class="user" onclick="toggleDropdown()">
@@ -49,89 +98,220 @@
     </ul>
   </div>
 
-  <div class="main-container">
-    <div class="card">
-      <div class="title-row">
-        <h2>Leads</h2>
-        <button class="add-btn" onclick="addLead()">+ Add Lead</button>
+ <div class="main-container">
+    <div class="title-row">
+      <h2>Leads</h2>
+      <button class="add-btn" onclick="openPopup()">+ Add Lead</button>
+    </div>
+
+    <div class="filters">
+      <select id="filterStatus" onchange="applyFilters()">
+        <option value="">--Status--</option>
+        <option>Pending</option>
+        <option>Contacted</option>
+        <option>In Progress</option>
+        <option>Closed</option>
+      </select>
+      <select id="filterSource" onchange="applyFilters()">
+        <option value="">--Source--</option>
+        <option>Website</option>
+        <option>Campaign</option>
+        <option>Referral</option>
+        <option>Other</option>
+      </select>
+      <input type="date" id="filterDate" onchange="applyFilters()">
+      <input type="text" id="searchInput" placeholder="Search leads..." oninput="searchTable()"/>
+    </div>
+
+    <table id="leadsTable">
+      <thead>
+        <tr>
+          <th>Name</th><th>Email</th><th>Phone</th><th>Message</th><th>Source</th><th>Status</th><th>Date</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div class="pagination">
+      <div>
+        Show
+        <select id="entriesPerPage" onchange="changeEntries()">
+          <option>10</option><option>20</option><option>50</option>
+        </select> entries
       </div>
-
-      <div class="top-controls">
-        <div class="left-icon">
-          <button class="icon-btn"><i class="fa-solid fa-table-cells-large"></i></button>
-          <div class="tooltip">Name, Email, Phone, Message, Source, Status, Date</div>
-        </div>
-        <div class="right-controls">
-          <button onclick="exportExcel()">Excel</button>
-          <button onclick="printTable()">Print</button>
-          <input type="text" id="searchInput" placeholder="Search leads..." oninput="searchTable()"/>
-        </div>
+      <div>
+        <button onclick="prevPage()">&lt;</button>
+        <span id="pageInfo">1 / 1</span>
+        <button onclick="nextPage()">&gt;</button>
       </div>
-
-      <div class="filters">
-        <select id="filterStatus">
-          <option value="">--Status--</option>
-          <option>Pending</option>
-          <option>Contacted</option>
-          <option>In Progress</option>
-          <option>Closed</option>
-        </select>
-        <select id="filterSource">
-          <option value="">--Source--</option>
-          <option>Website</option>
-          <option>Campaign</option>
-          <option>Referral</option>
-          <option>Other</option>
-        </select>
-        <input type="date" id="filterDate">
-        <div class="actions">
-          <button class="yes" onclick="applyFilters()"><i class="fa-solid fa-check"></i></button>
-          <button class="no" onclick="resetFilters()"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-      </div>
-
-      <table id="leadsTable">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Message</th>
-            <th>Source</th>
-            <th>Status</th>
-            <th>Date</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td colspan="8" style="text-align:center;">No leads available.</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="pagination">
-        <div>
-          Show
-          <select id="entriesPerPage" onchange="changeEntries()">
-            <option>10</option>
-            <option>20</option>
-            <option>50</option>
-          </select>
-          entries
-        </div>
-        <div>
-          <button onclick="prevPage()">&lt;</button>
-          <span id="pageInfo">0 / 0</span>
-          <button onclick="nextPage()">&gt;</button>
-        </div>
-      </div>
-
     </div>
   </div>
-</div>
 
-<script>
+  <!-- Popup for Add/Edit -->
+  <div class="popup-overlay" id="popupOverlay">
+    <div class="popup">
+      <h3 id="popupTitle">Add Lead</h3>
+      <label>Name</label>
+      <input type="text" id="leadName" required>
+      <label>Email</label>
+      <input type="email" id="leadEmail">
+      <label>Phone</label>
+      <input type="text" id="leadPhone">
+      <label>Message</label>
+      <textarea id="leadMessage"></textarea>
+      <label>Source</label>
+      <select id="leadSource">
+        <option>Website</option>
+        <option>Campaign</option>
+        <option>Referral</option>
+        <option>Other</option>
+      </select>
+      <label>Status</label>
+      <select id="leadStatus">
+        <option>Pending</option>
+        <option>Contacted</option>
+        <option>In Progress</option>
+        <option>Closed</option>
+      </select>
+      <div class="popup-buttons">
+        <button class="save-btn" onclick="saveLead()">Save</button>
+        <button class="cancel-btn" onclick="closePopup()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let leads = [];
+    let currentPage = 1;
+    let entries = 10;
+    let editIndex = null;
+
+    function openPopup(index=null){
+      document.getElementById('popupOverlay').style.display = 'flex';
+      document.getElementById('popupTitle').innerText = index===null ? 'Add Lead' : 'Edit Lead';
+      editIndex = index;
+
+      if(index!==null){
+        const l = leads[index];
+        document.getElementById('leadName').value = l.name;
+        document.getElementById('leadEmail').value = l.email;
+        document.getElementById('leadPhone').value = l.phone;
+        document.getElementById('leadMessage').value = l.message;
+        document.getElementById('leadSource').value = l.source;
+        document.getElementById('leadStatus').value = l.status;
+      } else {
+        document.querySelectorAll('#popupOverlay input, #popupOverlay textarea, #popupOverlay select')
+          .forEach(el => el.value = '');
+      }
+    }
+
+    function closePopup(){ document.getElementById('popupOverlay').style.display = 'none'; }
+
+    function saveLead(){
+      const name = document.getElementById('leadName').value.trim();
+      if(!name){ alert("Name is required"); return; }
+
+      const lead = {
+        name,
+        email: document.getElementById('leadEmail').value.trim(),
+        phone: document.getElementById('leadPhone').value.trim(),
+        message: document.getElementById('leadMessage').value.trim(),
+        source: document.getElementById('leadSource').value,
+        status: document.getElementById('leadStatus').value,
+        date: new Date().toISOString().split('T')[0],
+        archived: false
+      };
+
+      if(editIndex!==null){
+        leads[editIndex] = lead;
+      } else {
+        leads.push(lead);
+      }
+      closePopup();
+      renderTable();
+    }
+
+    function renderTable(){
+      const tbody = document.querySelector("#leadsTable tbody");
+      tbody.innerHTML = "";
+
+      const filtered = getFilteredData();
+      const start = (currentPage-1)*entries;
+      const end = start + entries;
+      const pageData = filtered.slice(start,end);
+
+      if(pageData.length===0){
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No leads available.</td></tr>';
+      } else {
+        pageData.forEach((l,i)=>{
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${l.name}</td>
+            <td>${l.email}</td>
+            <td>${l.phone}</td>
+            <td>${l.message}</td>
+            <td>${l.source}</td>
+            <td>${l.status}</td>
+            <td>${l.date}</td>
+            <td class="actions">
+              <button class="edit" onclick="openPopup(${leads.indexOf(l)})">Edit</button>
+              <button class="delete" onclick="deleteLead(${leads.indexOf(l)})">Delete</button>
+              <button class="archive" onclick="archiveLead(${leads.indexOf(l)})">Archive</button>
+            </td>`;
+          tbody.appendChild(tr);
+        });
+      }
+      document.getElementById('pageInfo').innerText =
+        `${currentPage} / ${Math.max(1,Math.ceil(filtered.length/entries))}`;
+    }
+
+    function deleteLead(i){
+      if(confirm('Delete this lead?')){
+        leads.splice(i,1);
+        renderTable();
+      }
+    }
+
+    function archiveLead(i){
+      leads[i].archived = true;
+      alert(`${leads[i].name} archived`);
+      renderTable();
+    }
+
+    // Filters + Search
+    function getFilteredData(){
+      const status = document.getElementById('filterStatus').value;
+      const source = document.getElementById('filterSource').value;
+      const date = document.getElementById('filterDate').value;
+      const term = document.getElementById('searchInput').value.toLowerCase();
+
+      return leads.filter(l=>{
+        return (!l.archived) &&
+          (status==="" || l.status===status) &&
+          (source==="" || l.source===source) &&
+          (date==="" || l.date===date) &&
+          (l.name.toLowerCase().includes(term) ||
+           l.email.toLowerCase().includes(term) ||
+           l.phone.toLowerCase().includes(term) ||
+           l.message.toLowerCase().includes(term));
+      });
+    }
+
+    function applyFilters(){ currentPage=1; renderTable(); }
+    function searchTable(){ currentPage=1; renderTable(); }
+
+    // Pagination
+    function changeEntries(){ entries=parseInt(document.getElementById('entriesPerPage').value); currentPage=1; renderTable(); }
+    function prevPage(){ if(currentPage>1) currentPage--; renderTable(); }
+    function nextPage(){
+      const totalPages = Math.ceil(getFilteredData().length/entries);
+      if(currentPage<totalPages) currentPage++;
+      renderTable();
+    }
+
+    renderTable();
+  </script>
+<!-- <script>
 // User dropdown
 function toggleDropdown() {
   const dropdown = document.getElementById('userDropdown');
@@ -211,7 +391,7 @@ function exportExcel(){ alert('Export Excel'); }
 function printTable(){ window.print(); }
 
 renderTable();
-</script>
+</script> -->
 
 </body>
 </html>
